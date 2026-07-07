@@ -1,0 +1,28 @@
+import 'package:flutter/material.dart';
+
+class SaveButton extends StatelessWidget {
+  final Future<void> Function() onSave;
+
+  const SaveButton({
+    super.key,
+    required this.onSave,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 58,
+      child: ElevatedButton.icon(
+        onPressed: () async {
+          await onSave();
+        },
+        icon: const Icon(Icons.check),
+        label: const Text(
+          "Save Log",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+}
