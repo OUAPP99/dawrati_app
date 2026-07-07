@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
+import '../../../core/widgets/animated_tap.dart';
 
 class SubscriptionPreviewSection extends StatelessWidget {
   final VoidCallback? onTap;
@@ -13,7 +14,7 @@ class SubscriptionPreviewSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AnimatedTap(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(26),
@@ -44,7 +45,11 @@ class SubscriptionPreviewSection extends StatelessWidget {
                 children: [
                   Text(
                     "Dawrati Premium",
-                    style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
                   SizedBox(height: 8),
                   Text(
@@ -54,7 +59,10 @@ class SubscriptionPreviewSection extends StatelessWidget {
                   SizedBox(height: 12),
                   Text(
                     "Try Premium →",
-                    style: TextStyle(color: Color(0xFFFFC1D6), fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: Color(0xFFFFC1D6),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),

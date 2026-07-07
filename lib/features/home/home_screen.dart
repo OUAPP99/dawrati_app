@@ -11,6 +11,7 @@ import 'sections/symptom_checker_section.dart';
 import 'sections/cycle_learning_section.dart';
 import 'sections/recommendation_section.dart';
 import 'sections/cycle_history_section.dart';
+import 'sections/ai_coach_preview_section.dart';
 import 'sections/subscription_preview_section.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -123,8 +124,15 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 30),
 
+            const FadeSlide(
+              delay: 780,
+              child: AiCoachPreviewSection(),
+            ),
+
+            const SizedBox(height: 30),
+
             FadeSlide(
-              delay: 800,
+              delay: 860,
               child: SubscriptionPreviewSection(
                 onTap: () {
                   Navigator.pushNamed(context, '/premium');

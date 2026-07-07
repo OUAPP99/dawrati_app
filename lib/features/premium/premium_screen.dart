@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/widgets/animated_tap.dart';
 import '../subscription/subscription_provider.dart';
 
 class PremiumScreen extends StatelessWidget {
@@ -78,14 +79,26 @@ class PremiumScreen extends StatelessWidget {
 
             const SizedBox(height: 26),
 
-            _feature(Icons.auto_awesome, "Dawrati AI Coach",
-                "Personal guidance based on your cycle and daily logs."),
-            _feature(Icons.analytics_outlined, "Advanced Insights",
-                "Understand mood, sleep, hydration and cycle trends."),
-            _feature(Icons.history, "Unlimited History",
-                "Track patterns across months, not only recent days."),
-            _feature(Icons.cloud_outlined, "Cloud Backup",
-                "Keep your health data safe across devices."),
+            _feature(
+              Icons.auto_awesome,
+              "Dawrati AI Coach",
+              "Personal guidance based on your cycle and daily logs.",
+            ),
+            _feature(
+              Icons.analytics_outlined,
+              "Advanced Insights",
+              "Understand mood, sleep, hydration and cycle trends.",
+            ),
+            _feature(
+              Icons.history,
+              "Unlimited History",
+              "Track patterns across months, not only recent days.",
+            ),
+            _feature(
+              Icons.cloud_outlined,
+              "Cloud Backup",
+              "Keep your health data safe across devices.",
+            ),
 
             const SizedBox(height: 22),
 
@@ -130,68 +143,89 @@ class PremiumScreen extends StatelessWidget {
   }
 
   Widget _feature(IconData icon, String title, String subtitle) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 14),
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(28),
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 26,
-            backgroundColor: const Color(0xFFFFEAF3),
-            child: Icon(icon, color: const Color(0xFFE91E63)),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title,
-                    style: const TextStyle(
-                        fontSize: 17, fontWeight: FontWeight.w900)),
-                const SizedBox(height: 4),
-                Text(subtitle,
-                    style: const TextStyle(color: Colors.grey, height: 1.3)),
-              ],
+    return AnimatedTap(
+      onTap: () {},
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 14),
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(28),
+        ),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 26,
+              backgroundColor: const Color(0xFFFFEAF3),
+              child: Icon(icon, color: const Color(0xFFE91E63)),
             ),
-          ),
-        ],
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      height: 1.3,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _pricing(String title, String price, bool selected) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: selected ? const Color(0xFFFFEAF3) : Colors.white,
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(
-          color: selected ? const Color(0xFFE91E63) : Colors.transparent,
-          width: 2,
+    return AnimatedTap(
+      onTap: () {},
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: selected ? const Color(0xFFFFEAF3) : Colors.white,
+          borderRadius: BorderRadius.circular(28),
+          border: Border.all(
+            color: selected ? const Color(0xFFE91E63) : Colors.transparent,
+            width: 2,
+          ),
         ),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            selected ? Icons.radio_button_checked : Icons.radio_button_off,
-            color: selected ? const Color(0xFFE91E63) : Colors.grey,
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+        child: Row(
+          children: [
+            Icon(
+              selected ? Icons.radio_button_checked : Icons.radio_button_off,
+              color: selected ? const Color(0xFFE91E63) : Colors.grey,
             ),
-          ),
-          Text(
-            price,
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
-          ),
-        ],
+            const SizedBox(width: 14),
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ),
+            Text(
+              price,
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
