@@ -1,4 +1,6 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
@@ -38,6 +40,15 @@ void main() async {
   try {
     await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
         .timeout(const Duration(seconds: 10));
+
+    // Attests that Firestore requests come from the real app binary
+    // (Play Integrity on Android, App Attest on iOS) instead of a
+    // scripted client with a stolen API key. Debug provider is used in
+    // debug builds since real devices/emulators aren't attestable there.
+    await FirebaseAppCheck.instance.activate(
+      providerAndroid: kDebugMode ? AndroidDebugProvider() : AndroidPlayIntegrityProvider(),
+      providerApple: kDebugMode ? AppleDebugProvider() : AppleAppAttestProvider(),
+    );
   } catch (e, st) {
     // Auth/cloud-sync features will be unavailable, but the rest of the
     // app must still start.
