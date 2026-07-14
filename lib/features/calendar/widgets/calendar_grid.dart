@@ -7,6 +7,8 @@ class CalendarGrid extends StatelessWidget {
   final DateTime currentMonth;
   final DateTime periodStartDate;
   final DateTime selectedDate;
+  final int cycleLength;
+  final int periodLength;
   final ValueChanged<DateTime> onSelectDate;
 
   const CalendarGrid({
@@ -15,20 +17,24 @@ class CalendarGrid extends StatelessWidget {
     required this.periodStartDate,
     required this.selectedDate,
     required this.onSelectDate,
+    this.cycleLength = 28,
+    this.periodLength = 5,
   });
 
   int _cycleDayFor(DateTime date) {
     final difference = date.difference(periodStartDate).inDays + 1;
-    return ((difference - 1) % 28) + 1;
+    return ((difference - 1) % cycleLength) + 1;
   }
 
   bool _sameDay(DateTime a, DateTime b) {
     return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 
-  bool _isPeriod(int cycleDay) => cycleDay >= 1 && cycleDay <= 5;
-  bool _isFertile(int cycleDay) => cycleDay >= 11 && cycleDay <= 15;
-  bool _isOvulation(int cycleDay) => cycleDay == 14;
+  int get _ovulationDay => cycleLength - 14;
+
+  bool _isPeriod(int cycleDay) => cycleDay >= 1 && cycleDay <= periodLength;
+  bool _isFertile(int cycleDay) => cycleDay >= _ovulationDay - 3 && cycleDay <= _ovulationDay + 1;
+  bool _isOvulation(int cycleDay) => cycleDay == _ovulationDay;
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +78,7 @@ class CalendarGrid extends StatelessWidget {
               return Expanded(
                 child: CalendarDayCell(
                   day: day,
+                  heroTag: 'calendarDay-${date.year}-${date.month}-${date.day}',
                   isToday: model.isToday,
                   isPeriod: model.isPeriod,
                   isFertile: model.isFertile,

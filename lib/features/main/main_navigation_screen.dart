@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/widgets/hayati_bottom_nav.dart';
+import '../../l10n/app_localizations.dart';
+import '../articles/articles_hub_screen.dart';
 import '../cycle/cycle_provider.dart';
 import '../home/home_screen.dart';
 import '../calendar/calendar_screen.dart';
@@ -30,16 +33,25 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     final cycle = context.watch<CycleProvider>();
+    final t = AppLocalizations.of(context);
 
     final screens = [
       HomeScreen(
-        dateDebutRegles: cycle.periodStartDate,
         onChangerDate: () {},
         onOpenCalendar: () {
           setState(() => currentIndex = 1);
         },
         onOpenLog: () {
           setState(() => currentIndex = 2);
+        },
+        onOpenProfile: () {
+          setState(() => currentIndex = 5);
+        },
+        onOpenInsights: () {
+          setState(() => currentIndex = 3);
+        },
+        onOpenArticles: () {
+          setState(() => currentIndex = 4);
         },
       ),
       CalendarScreen(
@@ -51,41 +63,67 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       ),
       const DailyLogScreen(),
       const InsightsScreen(),
+      const ArticlesHubScreen(),
       const ProfileScreen(),
     ];
 
     return Scaffold(
-      body: screens[currentIndex],
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: currentIndex,
-        onDestinationSelected: (index) {
-          setState(() => currentIndex = index);
+      extendBody: true,
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 280),
+        switchInCurve: Curves.easeOut,
+        switchOutCurve: Curves.easeIn,
+        transitionBuilder: (child, animation) {
+          final slide = Tween<Offset>(
+            begin: const Offset(0, 0.02),
+            end: Offset.zero,
+          ).animate(animation);
+          return FadeTransition(
+            opacity: animation,
+            child: SlideTransition(position: slide, child: child),
+          );
         },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: "Home",
+        layoutBuilder: (currentChild, previousChildren) => Stack(
+          children: [...previousChildren, if (currentChild != null) currentChild],
+        ),
+        child: KeyedSubtree(
+          key: ValueKey<int>(currentIndex),
+          child: screens[currentIndex],
+        ),
+      ),
+      bottomNavigationBar: HayatiBottomNav(
+        currentIndex: currentIndex,
+        onTap: (index) => setState(() => currentIndex = index),
+        items: [
+          HayatiNavItem(
+            icon: Icons.home_outlined,
+            activeIcon: Icons.home_rounded,
+            label: t.navHome,
           ),
-          NavigationDestination(
-            icon: Icon(Icons.calendar_month_outlined),
-            selectedIcon: Icon(Icons.calendar_month),
-            label: "Calendar",
+          HayatiNavItem(
+            icon: Icons.calendar_month_outlined,
+            activeIcon: Icons.calendar_month_rounded,
+            label: t.navCalendar,
           ),
-          NavigationDestination(
-            icon: Icon(Icons.add_circle_outline),
-            selectedIcon: Icon(Icons.add_circle),
-            label: "Log",
+          HayatiNavItem(
+            icon: Icons.add_circle_outline,
+            activeIcon: Icons.add_circle_rounded,
+            label: t.navLog,
           ),
-          NavigationDestination(
-            icon: Icon(Icons.insights_outlined),
-            selectedIcon: Icon(Icons.insights),
-            label: "Insights",
+          HayatiNavItem(
+            icon: Icons.insights_outlined,
+            activeIcon: Icons.insights_rounded,
+            label: t.navInsights,
           ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: "Profile",
+          HayatiNavItem(
+            icon: Icons.menu_book_outlined,
+            activeIcon: Icons.menu_book_rounded,
+            label: t.navArticles,
+          ),
+          HayatiNavItem(
+            icon: Icons.person_outline,
+            activeIcon: Icons.person_rounded,
+            label: t.navProfile,
           ),
         ],
       ),

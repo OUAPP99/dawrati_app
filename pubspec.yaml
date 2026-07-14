@@ -1,5 +1,5 @@
 name: cycle_app
-description: "A new Flutter project."
+description: "Dawrati (دورتي) - cycle tracking and wellness companion."
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -18,16 +18,50 @@ dependencies:
   cupertino_icons: ^1.0.8
   provider: ^6.1.5+1
   shared_preferences: ^2.5.5
+  flutter_local_notifications: ^18.0.1
+  timezone: ^0.10.0
+  fl_chart: ^0.69.2
+  share_plus: ^10.1.4
+  flutter_dotenv: ^5.2.1
+  http: ^1.2.2
+  firebase_core: ^4.11.0
+  firebase_auth: ^6.5.4
+  cloud_firestore: ^6.6.0
+  google_sign_in: ^6.2.2
+  in_app_purchase: ^3.2.3
+  local_auth: ^2.3.0
+  crypto: ^3.0.5
+  home_widget: ^0.7.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.4
 
 flutter:
   uses-material-design: true
+  generate: true
 
   assets:
     - assets/images/
     - assets/images/articles/
+    - assets/icon/
+    - env_config.txt
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
+  background_color_ios: "#FFF7FA"
+
+flutter_native_splash:
+  color: "#FFF7FA"
+  image: "assets/icon/icon.png"
+  android_12:
+    color: "#FFF7FA"
+    image: "assets/icon/icon.png"

@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../core/widgets/animated_tap.dart';
+import '../../../l10n/app_localizations.dart';
 
 class AiCoachPreviewSection extends StatelessWidget {
   const AiCoachPreviewSection({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return AnimatedTap(
       onTap: () {
         Navigator.pushNamed(context, '/ai-coach');
@@ -25,38 +28,34 @@ class AiCoachPreviewSection extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppRadius.card),
           boxShadow: AppShadows.soft,
         ),
-        child: const Row(
+        child: Row(
           children: [
-            CircleAvatar(
+            const CircleAvatar(
               radius: 30,
               backgroundColor: Colors.white,
-              child: Icon(
-                Icons.auto_awesome,
-                color: Color(0xFFE91E63),
-                size: 32,
-              ),
+              backgroundImage: AssetImage('assets/images/articles/coach.png'),
             ),
-            SizedBox(width: 18),
+            const SizedBox(width: 18),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Dawrati AI Coach",
-                    style: TextStyle(
+                    t.aiCoachCardTitle,
+                    style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
-                  SizedBox(height: 6),
+                  const SizedBox(height: 6),
                   Text(
-                    "Ask your cycle assistant for daily guidance.",
-                    style: TextStyle(color: Colors.black54),
+                    t.aiCoachCardSubtitle,
+                    style: const TextStyle(color: Colors.black54),
                   ),
                 ],
               ),
             ),
-            Icon(Icons.chevron_right),
+            const Icon(Icons.chevron_right),
           ],
         ),
       ),

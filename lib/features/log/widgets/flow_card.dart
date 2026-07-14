@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
+
 class FlowCard extends StatelessWidget {
   final String? selectedFlow;
   final ValueChanged<String> onChanged;
@@ -17,10 +19,27 @@ class FlowCard extends StatelessWidget {
     ("Heavy", "●●●●"),
   ];
 
+  static String label(AppLocalizations t, String key) {
+    switch (key) {
+      case "Spotting":
+        return t.flowSpotting;
+      case "Light":
+        return t.flowLight;
+      case "Medium":
+        return t.flowMedium;
+      case "Heavy":
+        return t.flowHeavy;
+      default:
+        return key;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return _card(
-      title: "Period Flow",
+      title: t.periodFlowTitle,
       child: Row(
         children: flows.map((flow) {
           final selected = selectedFlow == flow.$1;
@@ -44,7 +63,7 @@ class FlowCard extends StatelessWidget {
                   children: [
                     Text(flow.$2, style: const TextStyle(color: Color(0xFFE91E63))),
                     const SizedBox(height: 6),
-                    Text(flow.$1, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12)),
+                    Text(label(t, flow.$1), style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12)),
                   ],
                 ),
               ),

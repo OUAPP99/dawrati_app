@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
+import '../../../l10n/app_localizations.dart';
 
 class TodaysJourneySection extends StatelessWidget {
   const TodaysJourneySection({super.key});
@@ -33,6 +34,8 @@ class TodaysJourneySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
@@ -43,9 +46,9 @@ class TodaysJourneySection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Today's Journey",
-            style: TextStyle(
+          Text(
+            t.todaysJourney,
+            style: const TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.w900,
             ),
@@ -55,10 +58,10 @@ class TodaysJourneySection extends StatelessWidget {
 
           Row(
             children: [
-              tile(Icons.mood, "Mood"),
-              tile(Icons.water_drop, "Water"),
-              tile(Icons.nightlight_round, "Sleep"),
-              tile(Icons.directions_walk, "Activity"),
+              tile(Icons.mood, t.moodLabel),
+              tile(Icons.water_drop, t.waterLabel),
+              tile(Icons.nightlight_round, t.sleepLabel),
+              tile(Icons.directions_walk, t.activityLabel),
             ],
           ),
 
@@ -68,7 +71,7 @@ class TodaysJourneySection extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {},
-              child: const Text("Continue"),
+              child: Text(t.continueLabel),
             ),
           ),
         ],

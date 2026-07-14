@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
+import '../../../l10n/label_translations.dart';
+
 class CalendarPhaseCard extends StatelessWidget {
   final int cycleDay;
   final String phase;
+  final VoidCallback? onTap;
 
   const CalendarPhaseCard({
     super.key,
     required this.cycleDay,
     required this.phase,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final t = AppLocalizations.of(context);
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(30),
+      onTap: onTap,
+      child: Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -38,7 +48,7 @@ class CalendarPhaseCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Cycle Day $cycleDay",
+                  t.cycleDayLabel(cycleDay),
                   style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w900,
@@ -46,7 +56,7 @@ class CalendarPhaseCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  phase,
+                  translatePhase(t, phase),
                   style: const TextStyle(
                     color: Colors.grey,
                     fontWeight: FontWeight.w600,
@@ -57,6 +67,7 @@ class CalendarPhaseCard extends StatelessWidget {
           ),
           const Icon(Icons.chevron_right),
         ],
+      ),
       ),
     );
   }

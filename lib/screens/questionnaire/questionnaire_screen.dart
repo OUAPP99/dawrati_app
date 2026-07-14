@@ -3,6 +3,8 @@ import '../../core/widgets/hayati_button.dart';
 import '../../core/widgets/hayati_progress.dart';
 import 'package:provider/provider.dart';
 import '../../features/app_state/app_state_provider.dart';
+import '../../features/cycle/cycle_provider.dart';
+import '../../l10n/app_localizations.dart';
 
 class QuestionnaireScreen extends StatefulWidget {
   const QuestionnaireScreen({super.key});
@@ -31,7 +33,24 @@ Future<void> next() async {
   if (step < totalSteps - 1) {
     setState(() => step++);
   } else {
-    await context.read<AppStateProvider>().completeOnboarding();
+    final cycle = context.read<CycleProvider>();
+    final appState = context.read<AppStateProvider>();
+
+    if (lastPeriodDate != null) {
+      await cycle.updatePeriodStartDate(lastPeriodDate!);
+    }
+    await cycle.setEstimatedCycleLength(cycleLength.round());
+    await cycle.setPeriodLength(periodLength.round());
+    await appState.setProfileAnswers(
+      goal: goal,
+      contraception: contraception,
+      stress: stress,
+      sleep: sleep,
+    );
+    await appState.setWeightKg(weight);
+    await appState.setAge(age.round());
+    await appState.completeOnboarding();
+
     if (!mounted) return;
     Navigator.pushReplacementNamed(context, '/home');
   }
@@ -54,17 +73,38 @@ Future<void> next() async {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     final pages = [
-      _sliderQuestion("How old are you?", age, 10, 75, "", (v) => setState(() => age = v)),
-      _dateQuestion(),
-      _sliderQuestion("How long do your periods last?", periodLength, 1, 10, " days", (v) => setState(() => periodLength = v)),
-      _sliderQuestion("Average cycle length", cycleLength, 21, 40, " days", (v) => setState(() => cycleLength = v)),
-      _choiceQuestion("Why are you using دورتي?", ["Track my cycle", "Get pregnant", "Avoid pregnancy", "Understand my health"], goal, (v) => setState(() => goal = v)),
-      _choiceQuestion("Do you use contraception?", ["None", "Pill", "IUD", "Implant", "Other"], contraception, (v) => setState(() => contraception = v)),
-      _choiceQuestion("Stress level", ["Low", "Medium", "High"], stress, (v) => setState(() => stress = v)),
-      _choiceQuestion("Sleep duration", ["Less than 6h", "6–8h", "More than 8h"], sleep, (v) => setState(() => sleep = v)),
-      _sliderQuestion("What is your weight?", weight, 35, 140, " kg", (v) => setState(() => weight = v)),
-      _finishQuestion(),
+      _sliderQuestion(t.qAge, age, 10, 75, "", (v) => setState(() => age = v)),
+      _dateQuestion(t),
+      _sliderQuestion(t.qPeriodLength, periodLength, 1, 10, " days", (v) => setState(() => periodLength = v)),
+      _sliderQuestion(t.qCycleLength, cycleLength, 21, 40, " days", (v) => setState(() => cycleLength = v)),
+      _choiceQuestion(t.qGoal, {
+        'trackCycle': t.goalTrackCycle,
+        'getPregnant': t.goalGetPregnant,
+        'avoidPregnancy': t.goalAvoidPregnancy,
+        'understandHealth': t.goalUnderstandHealth,
+      }, goal, (v) => setState(() => goal = v)),
+      _choiceQuestion(t.qContraception, {
+        'none': t.contraceptionNone,
+        'pill': t.contraceptionPill,
+        'iud': t.contraceptionIUD,
+        'implant': t.contraceptionImplant,
+        'other': t.contraceptionOther,
+      }, contraception, (v) => setState(() => contraception = v)),
+      _choiceQuestion(t.qStress, {
+        'low': t.stressLow,
+        'medium': t.stressMedium,
+        'high': t.stressHigh,
+      }, stress, (v) => setState(() => stress = v)),
+      _choiceQuestion(t.qSleep, {
+        'less6': t.sleepLess6,
+        '6to8': t.sleep6to8,
+        'more8': t.sleepMore8,
+      }, sleep, (v) => setState(() => sleep = v)),
+      _sliderQuestion(t.qWeight, weight, 35, 140, " kg", (v) => setState(() => weight = v)),
+      _finishQuestion(t),
     ];
 
     return Scaffold(
@@ -97,13 +137,13 @@ Future<void> next() async {
                   if (step > 0)
                     TextButton(
                       onPressed: back,
-                      child: const Text("Back"),
+                      child: Text(t.back),
                     ),
                   const Spacer(),
                   SizedBox(
                     width: 170,
                     child: HayatiButton(
-                      text: step == totalSteps - 1 ? "Go Home" : "Continue",
+                      text: step == totalSteps - 1 ? t.goHome : t.continueLabel,
                       onPressed: next,
                     ),
                   ),
@@ -142,15 +182,15 @@ Future<void> next() async {
     );
   }
 
-  Widget _dateQuestion() {
+  Widget _dateQuestion(AppLocalizations t) {
     final label = lastPeriodDate == null
-        ? "Select date"
+        ? t.selectDate
         : "${lastPeriodDate!.day}/${lastPeriodDate!.month}/${lastPeriodDate!.year}";
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text("When did your last period start?", textAlign: TextAlign.center, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+        Text(t.qLastPeriod, textAlign: TextAlign.center, style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
         const SizedBox(height: 30),
         GestureDetector(
           onTap: pickDate,
@@ -175,7 +215,7 @@ Future<void> next() async {
 
   Widget _choiceQuestion(
     String title,
-    List<String> options,
+    Map<String, String> options,
     String? selected,
     ValueChanged<String> onSelected,
   ) {
@@ -184,10 +224,10 @@ Future<void> next() async {
       children: [
         Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
         const SizedBox(height: 30),
-        ...options.map((option) {
-          final isSelected = selected == option;
+        ...options.entries.map((option) {
+          final isSelected = selected == option.key;
           return GestureDetector(
-            onTap: () => onSelected(option),
+            onTap: () => onSelected(option.key),
             child: Container(
               width: double.infinity,
               margin: const EdgeInsets.only(bottom: 14),
@@ -197,7 +237,7 @@ Future<void> next() async {
                 borderRadius: BorderRadius.circular(18),
                 border: Border.all(color: isSelected ? Colors.pink : Colors.pink.shade100, width: 1.5),
               ),
-              child: Text(option, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
+              child: Text(option.value, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
             ),
           );
         }),
@@ -205,15 +245,15 @@ Future<void> next() async {
     );
   }
 
-  Widget _finishQuestion() {
+  Widget _finishQuestion(AppLocalizations t) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(Icons.check_circle_rounded, size: 100, color: Colors.pink.shade400),
         const SizedBox(height: 25),
-        const Text("Your profile is ready", textAlign: TextAlign.center, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+        Text(t.profileReadyTitle, textAlign: TextAlign.center, style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
         const SizedBox(height: 12),
-        const Text("دورتي can now personalize your cycle predictions.", textAlign: TextAlign.center, style: TextStyle(color: Colors.grey, fontSize: 16)),
+        Text(t.profileReadyDesc, textAlign: TextAlign.center, style: const TextStyle(color: Colors.grey, fontSize: 16)),
       ],
     );
   }

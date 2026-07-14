@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/widgets/fade_slide.dart';
+import '../cycle/cycle_provider.dart';
 import '../log/models/daily_log_entry.dart';
 import '../log/provider/daily_log_provider.dart';
 import 'widgets/bottom_sheet_day.dart';
@@ -39,16 +41,21 @@ class _CalendarScreenState extends State<CalendarScreen> {
     selectedDate = DateTime(now.year, now.month, now.day);
   }
 
+  int get cycleLength => context.read<CycleProvider>().averageCycleLength;
+  int get periodLength => context.read<CycleProvider>().periodLength;
+
   int cycleDayFor(DateTime date) {
     return date.difference(widget.dateDebutRegles).inDays + 1;
   }
 
   String phaseFor(int cycleDay) {
-    final day = ((cycleDay - 1) % 28) + 1;
+    final length = cycleLength;
+    final day = ((cycleDay - 1) % length) + 1;
+    final ovulationDay = length - 14;
 
-    if (day <= 5) return "Menstruation";
-    if (day <= 13) return "Follicular";
-    if (day <= 16) return "Ovulation";
+    if (day <= periodLength) return "Menstruation";
+    if (day <= ovulationDay - 1) return "Follicular";
+    if (day <= ovulationDay + 2) return "Ovulation";
     return "Luteal";
   }
 
@@ -99,11 +106,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   String pregnancyChance(int cycleDay) {
-    final day = ((cycleDay - 1) % 28) + 1;
+    final length = cycleLength;
+    final day = ((cycleDay - 1) % length) + 1;
+    final ovulationDay = length - 14;
 
-    if (day == 14) return "Peak";
-    if (day >= 11 && day <= 15) return "High";
-    if (day >= 8 && day <= 17) return "Medium";
+    if (day == ovulationDay) return "Peak";
+    if (day >= ovulationDay - 3 && day <= ovulationDay + 1) return "High";
+    if (day >= ovulationDay - 6 && day <= ovulationDay + 3) return "Medium";
     return "Low";
   }
 
@@ -121,59 +130,84 @@ class _CalendarScreenState extends State<CalendarScreen> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(18, 18, 18, 120),
           children: [
-            CalendarHeroHeader(
-              currentMonth: currentMonth,
-              cycleDay: selectedCycleDay,
-              phase: selectedPhase,
-              onPrevious: previousMonth,
-              onNext: nextMonth,
+            FadeSlide(
+              delay: 0,
+              child: CalendarHeroHeader(
+                currentMonth: currentMonth,
+                cycleDay: selectedCycleDay,
+                phase: selectedPhase,
+                onPrevious: previousMonth,
+                onNext: nextMonth,
+              ),
             ),
 
             const SizedBox(height: 24),
 
-            const WeekHeader(),
+            FadeSlide(
+              delay: 80,
+              child: Column(
+                children: [
+                  const WeekHeader(),
+                  const SizedBox(height: 18),
+                  CalendarGrid(
+                    currentMonth: currentMonth,
+                    periodStartDate: widget.dateDebutRegles,
+                    cycleLength: cycleLength,
+                    periodLength: periodLength,
+                    selectedDate: selectedDate,
+                    onSelectDate: (date) {
+                      final entry = findEntry(log.history, date);
 
-            const SizedBox(height: 18),
+                      setState(() {
+                        selectedDate = date;
+                      });
 
-            CalendarGrid(
-              
-              currentMonth: currentMonth,
-              periodStartDate: widget.dateDebutRegles,
-              selectedDate: selectedDate,
-              onSelectDate: (date) {
-                final entry = findEntry(log.history, date);
-
-                setState(() {
-                  selectedDate = date;
-                });
-
-                openDaySheet(context, date, entry);
-              },
+                      openDaySheet(context, date, entry);
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  const CalendarLegendV2(),
+                ],
+              ),
             ),
-            const SizedBox(height: 10),
-            const CalendarLegendV2(),
+
             const SizedBox(height: 28),
 
-            CalendarPhaseCard(
-              cycleDay: selectedCycleDay,
-              phase: selectedPhase,
+            FadeSlide(
+              delay: 160,
+              child: CalendarPhaseCard(
+                cycleDay: selectedCycleDay,
+                phase: selectedPhase,
+                onTap: () => openDaySheet(context, selectedDate, selectedEntry),
+              ),
             ),
 
             const SizedBox(height: 18),
 
-            FertilityCard(
-              chance: pregnancyChance(selectedCycleDay),
+            FadeSlide(
+              delay: 240,
+              child: FertilityCard(
+                chance: pregnancyChance(selectedCycleDay),
+                onTap: () => openDaySheet(context, selectedDate, selectedEntry),
+              ),
             ),
 
             const SizedBox(height: 18),
 
-            CycleTimeline(
-              cycleDay: selectedCycleDay,
+            FadeSlide(
+              delay: 320,
+              child: CycleTimeline(
+                cycleDay: selectedCycleDay,
+                cycleLength: cycleLength,
+              ),
             ),
 
             const SizedBox(height: 18),
 
-            DailyLogPreview(entry: selectedEntry),
+            FadeSlide(
+              delay: 400,
+              child: DailyLogPreview(entry: selectedEntry),
+            ),
           ],
         ),
       ),

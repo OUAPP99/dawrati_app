@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../l10n/label_translations.dart';
 
 class CalendarHeroHeader extends StatelessWidget {
   final DateTime currentMonth;
@@ -21,14 +23,17 @@ class CalendarHeroHeader extends StatelessWidget {
     required this.onNext,
   });
 
-  String fertility() {
-    if (cycleDay == 14) return "Peak fertility";
-    if (cycleDay >= 11 && cycleDay <= 15) return "High fertility";
-    return "Low fertility";
+  String fertility(AppLocalizations t) {
+    if (cycleDay == 14) return t.peakFertility;
+    if (cycleDay >= 11 && cycleDay <= 15) return t.highFertility;
+    return t.lowFertility;
   }
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).toString();
+
     return Container(
       padding: const EdgeInsets.all(26),
       decoration: BoxDecoration(
@@ -52,7 +57,7 @@ class CalendarHeroHeader extends StatelessWidget {
                   children: [
 
                     Text(
-                      DateFormat("MMMM yyyy").format(currentMonth),
+                      DateFormat.yMMMM(locale).format(currentMonth),
                       style: const TextStyle(
                         fontSize: 34,
                         fontWeight: FontWeight.w900,
@@ -61,9 +66,9 @@ class CalendarHeroHeader extends StatelessWidget {
 
                     const SizedBox(height: 6),
 
-                    const Text(
-                      "Good Morning 🌸",
-                      style: TextStyle(
+                    Text(
+                      t.goodMorning,
+                      style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 16,
                       ),
@@ -107,7 +112,7 @@ class CalendarHeroHeader extends StatelessWidget {
                   children: [
 
                     Text(
-                      "Cycle Day $cycleDay",
+                      t.cycleDayLabel(cycleDay),
                       style: const TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.w900,
@@ -117,7 +122,7 @@ class CalendarHeroHeader extends StatelessWidget {
                     const SizedBox(height: 4),
 
                     Text(
-                      phase,
+                      translatePhase(t, phase),
                       style: const TextStyle(
                         fontSize: 18,
                         color: Colors.grey,
@@ -141,7 +146,7 @@ class CalendarHeroHeader extends StatelessWidget {
                         const SizedBox(width: 8),
 
                         Text(
-                          fertility(),
+                          fertility(t),
                           style: const TextStyle(
                             fontWeight: FontWeight.w700,
                           ),

@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
+
 class CalendarLegendV2 extends StatelessWidget {
   const CalendarLegendV2({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Wrap(
       spacing: 14,
       runSpacing: 10,
       alignment: WrapAlignment.center,
-      children: const [
-        _Item(color: Color(0xFFFFB6CF), text: "Period"),
-        _Item(color: Color(0xFFDDF8FB), text: "Fertile"),
-        _Item(color: Color(0xFFDCC6FF), text: "Ovulation"),
-        _Item(color: Color(0xFFE91E63), text: "Selected"),
+      children: [
+        _Item(color: const Color(0xFFFFB6CF), text: t.legendPeriod),
+        _Item(color: const Color(0xFFDDF8FB), text: t.legendFertile),
+        _Item(color: const Color(0xFFDCC6FF), text: t.phaseOvulation),
+        _Item(color: const Color(0xFFE91E63), text: t.legendSelected),
       ],
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class CalendarDayCell extends StatelessWidget {
   final int day;
+  final String heroTag;
 
   final bool isToday;
   final bool isSelected;
@@ -18,6 +19,7 @@ class CalendarDayCell extends StatelessWidget {
   const CalendarDayCell({
     super.key,
     required this.day,
+    required this.heroTag,
     required this.onTap,
     this.isToday = false,
     this.isSelected = false,
@@ -55,52 +57,58 @@ class CalendarDayCell extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 280),
-        curve: Curves.easeOut,
+      child: Hero(
+        tag: heroTag,
+        flightShuttleBuilder: (_, animation, _, _, toContext) {
+          return ScaleTransition(scale: animation, child: toContext.widget);
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 280),
+          curve: Curves.easeOut,
 
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: bg,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: bg,
 
-          boxShadow: (isToday || isSelected)
-              ? [
-                  BoxShadow(
-                    color: const Color(0xFFE91E63).withValues(alpha: .30),
-                    blurRadius: 22,
-                    offset: const Offset(0, 8),
-                  )
-                ]
-              : [],
-        ),
+            boxShadow: (isToday || isSelected)
+                ? [
+                    BoxShadow(
+                      color: const Color(0xFFE91E63).withValues(alpha: .30),
+                      blurRadius: 22,
+                      offset: const Offset(0, 8),
+                    )
+                  ]
+                : [],
+          ),
 
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
 
-            Text(
-              "$day",
-              style: TextStyle(
-                fontWeight: FontWeight.w800,
-                color: text,
-                fontSize: 17,
-              ),
-            ),
-
-            if (hasLog)
-              Positioned(
-                bottom: 7,
-                child: Container(
-                  width: 6,
-                  height: 6,
-                  decoration: BoxDecoration(
-                    color: text,
-                    shape: BoxShape.circle,
-                  ),
+              Text(
+                "$day",
+                style: TextStyle(
+                  fontWeight: FontWeight.w800,
+                  color: text,
+                  fontSize: 17,
                 ),
               ),
 
-          ],
+              if (hasLog)
+                Positioned(
+                  bottom: 7,
+                  child: Container(
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: text,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+
+            ],
+          ),
         ),
       ),
     );

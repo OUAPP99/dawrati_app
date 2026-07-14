@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
+
 class AIInsightCard extends StatelessWidget {
   final String insight;
 
@@ -39,9 +41,9 @@ class AIInsightCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Dawrati AI",
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context).dawratiAiLabel,
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
                   ),

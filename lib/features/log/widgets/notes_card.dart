@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
+
 class NotesCard extends StatelessWidget {
   final TextEditingController controller;
 
@@ -10,6 +12,8 @@ class NotesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
@@ -26,16 +30,16 @@ class NotesCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Notes",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+          Text(
+            t.notesLabel,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
           ),
           const SizedBox(height: 18),
           TextField(
             controller: controller,
             maxLines: 5,
             decoration: InputDecoration(
-              hintText: "Write anything you want to remember...",
+              hintText: t.notesHint,
               filled: true,
               fillColor: const Color(0xFFFFF7FA),
               border: OutlineInputBorder(

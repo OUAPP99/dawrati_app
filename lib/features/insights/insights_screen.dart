@@ -1,27 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'widgets/mini_bar_chart.dart';
+import 'widgets/trend_chart.dart';
+import '../../core/widgets/fade_slide.dart';
+import '../../l10n/app_localizations.dart';
+import '../../l10n/label_translations.dart';
 import '../cycle/cycle_provider.dart';
+import '../log/export_service.dart';
 import '../log/provider/daily_log_provider.dart';
+import '../subscription/subscription_provider.dart';
 
-class InsightsScreen extends StatelessWidget {
+class InsightsScreen extends StatefulWidget {
   const InsightsScreen({super.key});
+
+  @override
+  State<InsightsScreen> createState() => _InsightsScreenState();
+}
+
+class _InsightsScreenState extends State<InsightsScreen> {
+  int rangeDays = 7;
 
   @override
   Widget build(BuildContext context) {
     final cycle = context.watch<CycleProvider>();
     final log = context.watch<DailyLogProvider>();
+    final isPremium = context.watch<SubscriptionProvider>().isPremium;
+    final t = AppLocalizations.of(context);
 
-    final last7 = log.history.length <= 7
-        ? log.history
-        : log.history.sublist(log.history.length - 7);
+    final sorted = [...log.history]..sort((a, b) => a.date.compareTo(b.date));
+    final range = sorted.length <= rangeDays
+        ? sorted
+        : sorted.sublist(sorted.length - rangeDays);
 
-    final waterValues =
-        last7.isEmpty ? List.filled(7, 0.0) : last7.map((e) => e.water).toList();
-
-    final sleepValues =
-        last7.isEmpty ? List.filled(7, 0.0) : last7.map((e) => e.sleep).toList();
+    final dates = range.map((e) => e.date).toList();
+    final waterValues = range.map((e) => e.water).toList();
+    final sleepValues = range.map((e) => e.sleep).toList();
+    final moodValues = range.map((e) => moodScore(e.mood).toDouble()).toList();
 
     return Scaffold(
       backgroundColor: const Color(0xFFFFF7FA),
@@ -29,54 +43,219 @@ class InsightsScreen extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 18, 22, 120),
           children: [
-            const Text(
-              "Insights",
-              style: TextStyle(fontSize: 34, fontWeight: FontWeight.w900),
-            ),
-            const SizedBox(height: 24),
-
-            _hero(cycle.phase, cycle.cycleDay),
-            const SizedBox(height: 22),
-
             Row(
               children: [
-                Expanded(child: _smallCard("Water", "${log.water.toStringAsFixed(1)}L", Icons.water_drop, Colors.blue)),
-                const SizedBox(width: 14),
-                Expanded(child: _smallCard("Sleep", "${log.sleep.toStringAsFixed(1)}h", Icons.bedtime, Colors.indigo)),
+                Expanded(
+                  child: Text(
+                    t.insightsTitle,
+                    style: const TextStyle(fontSize: 34, fontWeight: FontWeight.w900),
+                  ),
+                ),
+                PopupMenuButton<String>(
+                  tooltip: t.exportChooseFormat,
+                  icon: const Icon(Icons.ios_share),
+                  onSelected: (value) async {
+                    if (value == 'ics') {
+                      await ExportService.exportIcsAndShare(cycle);
+                      return;
+                    }
+                    if (value == 'csv' && !isPremium) {
+                      Navigator.pushNamed(context, '/premium');
+                      return;
+                    }
+                    if (log.history.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(t.exportNoData)),
+                      );
+                      return;
+                    }
+                    if (value == 'csv') {
+                      await ExportService.exportAndShare(log.history);
+                    } else {
+                      await ExportService.exportDoctorSummaryAndShare(cycle, log.history);
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: 'csv',
+                      child: Row(
+                        children: [
+                          Text(t.exportCsvOption),
+                          if (!isPremium) ...[
+                            const SizedBox(width: 6),
+                            Icon(Icons.lock, size: 14, color: Colors.grey.shade500),
+                          ],
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(value: 'doctor', child: Text(t.exportDoctorSummary)),
+                    PopupMenuItem(value: 'ics', child: Text(t.exportIcsOption)),
+                  ],
+                ),
               ],
+            ),
+            const SizedBox(height: 12),
+
+            FadeSlide(delay: 0, child: _hero(t, cycle.phase, cycle.cycleDay)),
+            const SizedBox(height: 22),
+
+            FadeSlide(
+              delay: 80,
+              child: Row(
+                children: [
+                  Expanded(child: _smallCard(t.waterLabel, "${log.water.toStringAsFixed(1)}L", Icons.water_drop, Colors.blue)),
+                  const SizedBox(width: 14),
+                  Expanded(child: _smallCard(t.sleepLabel, "${log.sleep.toStringAsFixed(1)}h", Icons.bedtime, Colors.indigo)),
+                ],
+              ),
             ),
             const SizedBox(height: 14),
 
-            Row(
-              children: [
-                Expanded(child: _smallCard("Mood", log.mood.split(" ").first, Icons.mood, Colors.orange)),
-                const SizedBox(width: 14),
-                Expanded(child: _smallCard("Logs", "${log.history.length}", Icons.edit_note, Colors.green)),
-              ],
+            FadeSlide(
+              delay: 140,
+              child: Row(
+                children: [
+                  Expanded(child: _smallCard(t.moodLabel, translateMoodString(t, log.mood), Icons.mood, Colors.orange)),
+                  const SizedBox(width: 14),
+                  Expanded(child: _smallCard(t.logsLabel, "${log.history.length}", Icons.edit_note, Colors.green)),
+                ],
+              ),
             ),
 
             const SizedBox(height: 28),
-            _chartCard("Hydration", "Last 7 days", waterValues, Colors.blue),
 
-            const SizedBox(height: 22),
-            _chartCard("Sleep", "Last 7 days", sleepValues, Colors.indigo),
+            FadeSlide(
+              delay: 200,
+              child: _rangeSelector(context, t, isPremium),
+            ),
 
-            const SizedBox(height: 22),
-            _aiCard(
-              "You are currently in the ${cycle.phase}. "
-              "Your latest log shows ${log.water.toStringAsFixed(1)}L water, "
-              "${log.sleep.toStringAsFixed(1)}h sleep and mood: ${log.mood}.",
+            const SizedBox(height: 18),
+            FadeSlide(
+              delay: 240,
+              child: _chartCard(
+                t.hydrationTitle,
+                TrendChart(
+                  dates: dates,
+                  values: waterValues,
+                  color: Colors.blue,
+                  minY: 0,
+                  maxY: (waterValues.isEmpty ? 2.0 : (waterValues.reduce((a, b) => a > b ? a : b) * 1.2)).clamp(1.0, double.infinity),
+                  valueLabel: (v) => "${v.toStringAsFixed(1)}L",
+                  leftAxisLabel: (v) => "${v.toStringAsFixed(0)}L",
+                  noDataLabel: t.noDataYetLabel,
+                ),
+              ),
             ),
 
             const SizedBox(height: 22),
-            _premiumCard(),
+            FadeSlide(
+              delay: 280,
+              child: _chartCard(
+                t.sleepLabel,
+                TrendChart(
+                  dates: dates,
+                  values: sleepValues,
+                  color: Colors.indigo,
+                  minY: 0,
+                  maxY: (sleepValues.isEmpty ? 10.0 : (sleepValues.reduce((a, b) => a > b ? a : b) * 1.2)).clamp(4.0, double.infinity),
+                  valueLabel: (v) => "${v.toStringAsFixed(1)}h",
+                  leftAxisLabel: (v) => "${v.toStringAsFixed(0)}h",
+                  noDataLabel: t.noDataYetLabel,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 22),
+            FadeSlide(
+              delay: 320,
+              child: _chartCard(
+                t.moodTrendTitle,
+                TrendChart(
+                  dates: dates,
+                  values: moodValues,
+                  color: Colors.orange,
+                  minY: 1,
+                  maxY: 5,
+                  valueLabel: (v) => moodScoreEmojis[(v.round() - 1).clamp(0, 4)],
+                  leftAxisLabel: (v) => moodScoreEmojis[(v.round() - 1).clamp(0, 4)],
+                  noDataLabel: t.noDataYetLabel,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 22),
+            FadeSlide(
+              delay: 360,
+              child: _aiCard(
+                t.aiInsightDynamicText(
+                  translatePhase(t, cycle.phase),
+                  log.water.toStringAsFixed(1),
+                  log.sleep.toStringAsFixed(1),
+                  translateMoodString(t, log.mood),
+                ),
+              ),
+            ),
+
+            if (!isPremium) ...[
+              const SizedBox(height: 22),
+              FadeSlide(delay: 420, child: _premiumCard(t)),
+            ],
           ],
         ),
       ),
     );
   }
 
-  Widget _hero(String phase, int cycleDay) {
+  Widget _rangeSelector(BuildContext context, AppLocalizations t, bool isPremium) {
+    return Row(
+      children: [
+        Expanded(child: _rangeChip(context, t.last7Days, 7, locked: false)),
+        const SizedBox(width: 12),
+        Expanded(child: _rangeChip(context, t.last30Days, 30, locked: !isPremium)),
+      ],
+    );
+  }
+
+  Widget _rangeChip(BuildContext context, String label, int days, {required bool locked}) {
+    final selected = rangeDays == days;
+
+    return GestureDetector(
+      onTap: () {
+        if (locked) {
+          Navigator.pushNamed(context, '/premium');
+          return;
+        }
+        setState(() => rangeDays = days);
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: selected ? const Color(0xFFE91E63) : Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        alignment: Alignment.center,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (locked) ...[
+              Icon(Icons.lock, size: 14, color: selected ? Colors.white : Colors.grey.shade500),
+              const SizedBox(width: 6),
+            ],
+            Text(
+              label,
+              style: TextStyle(
+                color: selected ? Colors.white : Colors.black87,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _hero(AppLocalizations t, String phase, int cycleDay) {
     return Container(
       padding: const EdgeInsets.all(26),
       decoration: BoxDecoration(
@@ -88,11 +267,11 @@ class InsightsScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Cycle Overview", style: TextStyle(fontSize: 18, color: Colors.grey, fontWeight: FontWeight.w700)),
+          Text(t.cycleOverview, style: const TextStyle(fontSize: 18, color: Colors.grey, fontWeight: FontWeight.w700)),
           const SizedBox(height: 10),
-          Text("Day $cycleDay", style: const TextStyle(fontSize: 46, fontWeight: FontWeight.w900)),
+          Text(t.dayLabel(cycleDay), style: const TextStyle(fontSize: 46, fontWeight: FontWeight.w900)),
           const SizedBox(height: 6),
-          Text(phase, style: const TextStyle(fontSize: 22, color: Color(0xFFE91E63), fontWeight: FontWeight.w800)),
+          Text(translatePhase(t, phase), style: const TextStyle(fontSize: 22, color: Color(0xFFE91E63), fontWeight: FontWeight.w800)),
         ],
       ),
     );
@@ -117,7 +296,7 @@ class InsightsScreen extends StatelessWidget {
     );
   }
 
-  Widget _chartCard(String title, String subtitle, List<double> values, Color color) {
+  Widget _chartCard(String title, Widget chart) {
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
@@ -128,10 +307,8 @@ class InsightsScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),
-          const SizedBox(height: 4),
-          Text(subtitle, style: const TextStyle(color: Colors.grey)),
-          const SizedBox(height: 22),
-          MiniBarChart(values: values, color: color),
+          const SizedBox(height: 18),
+          chart,
         ],
       ),
     );
@@ -163,24 +340,24 @@ class InsightsScreen extends StatelessWidget {
     );
   }
 
-  Widget _premiumCard() {
+  Widget _premiumCard(AppLocalizations t) {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: const Color(0xFF1F1B2E),
         borderRadius: BorderRadius.circular(30),
       ),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Advanced Insights", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
-          SizedBox(height: 10),
+          Text(t.advancedInsights, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
+          const SizedBox(height: 10),
           Text(
-            "Unlock cycle trends, symptom patterns and AI health analysis.",
-            style: TextStyle(color: Colors.white70, height: 1.4),
+            t.advancedInsightsDesc,
+            style: const TextStyle(color: Colors.white70, height: 1.4),
           ),
-          SizedBox(height: 14),
-          Text("Premium →", style: TextStyle(color: Color(0xFFFFC1D6), fontWeight: FontWeight.bold)),
+          const SizedBox(height: 14),
+          Text(t.premiumArrow, style: const TextStyle(color: Color(0xFFFFC1D6), fontWeight: FontWeight.bold)),
         ],
       ),
     );

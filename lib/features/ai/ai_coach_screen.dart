@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../l10n/app_localizations.dart';
+import '../../l10n/label_translations.dart';
 import '../cycle/cycle_provider.dart';
 import '../log/provider/daily_log_provider.dart';
+import '../subscription/subscription_provider.dart';
+import 'ai_chat_screen.dart';
 
 class AiCoachScreen extends StatelessWidget {
   const AiCoachScreen({super.key});
@@ -11,19 +15,30 @@ class AiCoachScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final cycle = context.watch<CycleProvider>();
     final log = context.watch<DailyLogProvider>();
+    final subscription = context.watch<SubscriptionProvider>();
+    final t = AppLocalizations.of(context);
 
     return Scaffold(
       backgroundColor: const Color(0xFFFFF7FA),
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(22, 18, 22, 120),
+          padding: const EdgeInsets.fromLTRB(22, 10, 22, 120),
           children: [
-            const Text(
-              "Dawrati AI",
-              style: TextStyle(
-                fontSize: 34,
-                fontWeight: FontWeight.w900,
-              ),
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.arrow_back),
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  t.dawratiAiLabel,
+                  style: const TextStyle(
+                    fontSize: 34,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ],
             ),
 
             const SizedBox(height: 22),
@@ -39,31 +54,27 @@ class AiCoachScreen extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(34),
               ),
-              child: const Column(
+              child: Column(
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 38,
                     backgroundColor: Colors.white,
-                    child: Icon(
-                      Icons.auto_awesome,
-                      size: 40,
-                      color: Color(0xFFE91E63),
-                    ),
+                    backgroundImage: AssetImage('assets/images/articles/coach.png'),
                   ),
-                  SizedBox(height: 18),
+                  const SizedBox(height: 18),
                   Text(
-                    "Your Personal AI Coach",
+                    t.personalAiCoach,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   Text(
-                    "Daily guidance based on your cycle and your health logs.",
+                    t.dailyGuidanceDesc,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black54,
                       height: 1.45,
                     ),
@@ -75,26 +86,26 @@ class AiCoachScreen extends StatelessWidget {
             const SizedBox(height: 26),
 
             _adviceCard(
-              "Current phase",
-              "${cycle.phase} • Day ${cycle.cycleDay}",
+              t.currentPhase,
+              t.phaseDayCombo(translatePhase(t, cycle.phase), cycle.cycleDay),
               Icons.favorite,
             ),
 
             _adviceCard(
-              "Today's mood",
-              log.mood,
+              t.todaysMood,
+              translateMoodString(t, log.mood),
               Icons.mood,
             ),
 
             _adviceCard(
-              "Hydration",
-              "${log.water.toStringAsFixed(1)} L today",
+              t.hydrationTitle,
+              t.hydrationTodayValue(log.water.toStringAsFixed(1)),
               Icons.water_drop,
             ),
 
             _adviceCard(
-              "Sleep",
-              "${log.sleep.toStringAsFixed(1)} hours",
+              t.sleepLabel,
+              t.sleepHoursValue(log.sleep.toStringAsFixed(1)),
               Icons.bedtime,
             ),
 
@@ -109,16 +120,16 @@ class AiCoachScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
+                  Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.auto_awesome,
                         color: Color(0xFFE91E63),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Text(
-                        "Today's AI Insight",
-                        style: TextStyle(
+                        t.todaysAiInsight,
+                        style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w900,
                         ),
@@ -127,7 +138,7 @@ class AiCoachScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 18),
                   Text(
-                    _generateInsight(cycle.phase, log.water, log.sleep),
+                    _generateInsight(t, cycle.phase, log.water, log.sleep),
                     style: const TextStyle(
                       fontSize: 16,
                       height: 1.6,
@@ -143,18 +154,37 @@ class AiCoachScreen extends StatelessWidget {
               height: 56,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        "AI Chat will be available in the next version.",
+                  final languageName = switch (Localizations.localeOf(context).languageCode) {
+                    'fr' => 'French',
+                    'ar' => 'Arabic',
+                    _ => 'English',
+                  };
+
+                  final systemContext =
+                      'You are Dawrati AI, a warm and knowledgeable menstrual health and '
+                      'wellness coach inside the Dawrati app. The user is on cycle day '
+                      '${cycle.cycleDay}, currently in the ${cycle.phase} phase. Today they '
+                      'logged: mood ${log.mood}, water intake ${log.water.toStringAsFixed(1)}L, '
+                      'sleep ${log.sleep.toStringAsFixed(1)}h. Give supportive, practical '
+                      'guidance about their cycle, symptoms, mood, hydration and sleep. Keep '
+                      'answers concise (2-4 sentences) unless the user asks for more detail. '
+                      'You are not a doctor — for medical concerns, gently suggest consulting '
+                      'a healthcare professional. Always respond in $languageName.';
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => AiChatScreen(
+                        systemContext: systemContext,
+                        isPremium: subscription.isPremium,
                       ),
                     ),
                   );
                 },
                 icon: const Icon(Icons.chat_bubble_outline),
-                label: const Text(
-                  "Start AI Conversation",
-                  style: TextStyle(
+                label: Text(
+                  t.startAiConversation,
+                  style: const TextStyle(
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -215,26 +245,27 @@ class AiCoachScreen extends StatelessWidget {
   }
 
   static String _generateInsight(
+    AppLocalizations t,
     String phase,
     double water,
     double sleep,
   ) {
     if (phase == "Ovulation") {
-      return "You are likely in your most energetic phase. Stay hydrated and enjoy physical activity if you feel comfortable.";
+      return t.insightOvulation;
     }
 
     if (phase == "Menstruation") {
-      return "Your body may need more rest today. Prioritize sleep, hydration and iron-rich foods.";
+      return t.insightMenstruation;
     }
 
     if (water < 1.5) {
-      return "Your hydration is lower than recommended. Drinking more water may help reduce fatigue.";
+      return t.insightLowHydration;
     }
 
     if (sleep < 7) {
-      return "You slept less than recommended. A consistent bedtime may improve your energy tomorrow.";
+      return t.insightLowSleep;
     }
 
-    return "Your recent health data looks balanced. Keep tracking daily to receive more personalized insights.";
+    return t.insightBalanced;
   }
 }

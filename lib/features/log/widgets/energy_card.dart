@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
+
 class EnergyCard extends StatelessWidget {
   final double energy;
   final ValueChanged<double> onChanged;
@@ -13,7 +15,7 @@ class EnergyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _card(
-      title: "Energy",
+      title: AppLocalizations.of(context).energyTitle,
       child: Column(
         children: [
           Text(

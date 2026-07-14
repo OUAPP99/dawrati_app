@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../log/models/daily_log_entry.dart';
 
 class DailyLogPreview extends StatelessWidget {
@@ -14,6 +15,8 @@ class DailyLogPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
@@ -24,22 +27,22 @@ class DailyLogPreview extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Daily Summary",
-            style: TextStyle(
+          Text(
+            t.dailySummaryTitle,
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w900,
             ),
           ),
           const SizedBox(height: 20),
           if (entry == null)
-            _empty()
+            _empty(t)
           else
             Row(
               children: [
-                _metric(entry!.mood.split(" ").first, "Mood"),
-                _metric("${entry!.water.toStringAsFixed(1)}L", "Water"),
-                _metric("${entry!.sleep.toStringAsFixed(1)}h", "Sleep"),
+                _metric(entry!.mood.split(" ").first, t.moodLabel),
+                _metric("${entry!.water.toStringAsFixed(1)}L", t.waterLabel),
+                _metric("${entry!.sleep.toStringAsFixed(1)}h", t.sleepLabel),
               ],
             ),
         ],
@@ -47,7 +50,7 @@ class DailyLogPreview extends StatelessWidget {
     );
   }
 
-  Widget _empty() {
+  Widget _empty(AppLocalizations t) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -55,14 +58,14 @@ class DailyLogPreview extends StatelessWidget {
         color: const Color(0xFFFFF7FA),
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
-      child: const Row(
+      child: Row(
         children: [
-          Icon(Icons.add_circle_outline, color: Color(0xFFE91E63)),
-          SizedBox(width: 14),
+          const Icon(Icons.add_circle_outline, color: Color(0xFFE91E63)),
+          const SizedBox(width: 14),
           Expanded(
             child: Text(
-              "No log for this day. Add mood, water, sleep and symptoms.",
-              style: TextStyle(
+              t.noLogForDay,
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
               ),

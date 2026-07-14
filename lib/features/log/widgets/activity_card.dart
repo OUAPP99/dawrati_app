@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
+
 class ActivityCard extends StatelessWidget {
   final String? selectedActivity;
   final ValueChanged<String> onChanged;
@@ -18,10 +20,29 @@ class ActivityCard extends StatelessWidget {
     ("Yoga", Icons.self_improvement),
   ];
 
+  static String label(AppLocalizations t, String key) {
+    switch (key) {
+      case "None":
+        return t.activityNone;
+      case "Walk":
+        return t.activityWalk;
+      case "Run":
+        return t.activityRun;
+      case "Gym":
+        return t.activityGym;
+      case "Yoga":
+        return t.activityYoga;
+      default:
+        return key;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return _card(
-      title: "Activity",
+      title: t.activityLabel,
       child: Wrap(
         spacing: 10,
         runSpacing: 10,
@@ -30,7 +51,7 @@ class ActivityCard extends StatelessWidget {
 
           return ChoiceChip(
             selected: selected,
-            label: Text(item.$1),
+            label: Text(label(t, item.$1)),
             avatar: Icon(
               item.$2,
               size: 18,

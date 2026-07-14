@@ -1,14 +1,69 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../features/app_state/app_state_provider.dart';
+import '../../features/auth/auth_provider.dart';
+import '../../features/partner/partner_entry_screen.dart';
+import '../../l10n/app_localizations.dart';
+import 'email_auth_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
-  void _continue(BuildContext context) {
+  void _continueAsGuest(BuildContext context) {
+    context.read<AuthProvider>().continueAsGuest();
     Navigator.pushReplacementNamed(context, "/questionnaire");
+  }
+
+  void _openEmailAuth(BuildContext context, {required bool signIn}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => EmailAuthScreen(startInSignIn: signIn)),
+    );
+  }
+
+  void _openPartnerEntry(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const PartnerEntryScreen()),
+    );
+  }
+
+  void _showAppleComingSoon(BuildContext context) {
+    final t = AppLocalizations.of(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(t.appleSignInComingSoon)),
+    );
+  }
+
+  Future<void> _handleGoogleSignIn(BuildContext context) async {
+    final t = AppLocalizations.of(context);
+    final auth = context.read<AuthProvider>();
+
+    final result = await auth.signInWithGoogle();
+    if (!context.mounted) return;
+
+    if (!result.ok) {
+      if (result.errorCode == 'cancelled') return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(t.authErrorGeneric)),
+      );
+      return;
+    }
+
+    if (result.isNewUser) {
+      Navigator.pushReplacementNamed(context, '/questionnaire');
+    } else {
+      await context.read<AppStateProvider>().completeOnboarding();
+      if (!context.mounted) return;
+      Navigator.pushReplacementNamed(context, '/home');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Scaffold(
       backgroundColor: const Color(0xFFFFF7FA),
       body: SafeArea(
@@ -40,10 +95,10 @@ class LoginScreen extends StatelessWidget {
 
             const SizedBox(height: 36),
 
-            const Text(
-              "Welcome to\nDawrati",
+            Text(
+              t.welcomeTitle,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 36,
                 fontWeight: FontWeight.w900,
                 height: 1.15,
@@ -52,10 +107,10 @@ class LoginScreen extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            const Text(
-              "Track your cycle, understand your body and receive personalized AI insights.",
+            Text(
+              t.welcomeSubtitle,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 17,
                 color: Colors.black54,
                 height: 1.5,
@@ -66,41 +121,41 @@ class LoginScreen extends StatelessWidget {
 
             _button(
               icon: Icons.apple,
-              text: "Continue with Apple",
+              text: t.continueWithApple,
               color: Colors.black,
               textColor: Colors.white,
-              onTap: () => _continue(context),
+              onTap: () => _showAppleComingSoon(context),
             ),
 
             const SizedBox(height: 16),
 
             _button(
               icon: Icons.g_mobiledata,
-              text: "Continue with Google",
+              text: t.continueWithGoogle,
               color: Colors.white,
               textColor: Colors.black,
               border: true,
-              onTap: () => _continue(context),
+              onTap: () => _handleGoogleSignIn(context),
             ),
 
             const SizedBox(height: 16),
 
             _button(
               icon: Icons.email_outlined,
-              text: "Continue with Email",
+              text: t.continueWithEmail,
               color: const Color(0xFFE91E63),
               textColor: Colors.white,
-              onTap: () => _continue(context),
+              onTap: () => _openEmailAuth(context, signIn: false),
             ),
 
             const SizedBox(height: 30),
 
             Center(
               child: TextButton(
-                onPressed: () => _continue(context),
-                child: const Text(
-                  "Continue without an account",
-                  style: TextStyle(
+                onPressed: () => _continueAsGuest(context),
+                child: Text(
+                  t.continueWithoutAccount,
+                  style: const TextStyle(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -115,12 +170,25 @@ class LoginScreen extends StatelessWidget {
 
             Center(
               child: TextButton(
-                onPressed: () => _continue(context),
-                child: const Text(
-                  "I already have an account",
-                  style: TextStyle(
+                onPressed: () => _openEmailAuth(context, signIn: true),
+                child: Text(
+                  t.alreadyHaveAccount,
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            Center(
+              child: TextButton.icon(
+                onPressed: () => _openPartnerEntry(context),
+                icon: const Icon(Icons.favorite_border, size: 18, color: Colors.grey),
+                label: Text(
+                  t.partnerEntryLink,
+                  style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.grey),
                 ),
               ),
             ),

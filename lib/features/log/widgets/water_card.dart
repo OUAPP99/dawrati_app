@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
+
 class WaterCard extends StatelessWidget {
   final double water;
   final VoidCallback onMinus;
@@ -15,7 +17,7 @@ class WaterCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _card(
-      title: "Water",
+      title: AppLocalizations.of(context).waterLabel,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

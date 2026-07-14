@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -15,45 +17,71 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     Timer(const Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, '/language');
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/onboarding');
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Scaffold(
       backgroundColor: const Color(0xFFFFF6F8),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-
-            Icon(
-              Icons.favorite,
-              color: Colors.pink,
-              size: 90,
-            ),
-
-            SizedBox(height: 24),
-
-            Text(
-              "دورتي",
-              style: TextStyle(
-                fontSize: 34,
-                fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: TextButton.icon(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/language');
+                  },
+                  icon: const Icon(Icons.language, color: Colors.grey),
+                  label: Text(
+                    t.changeLanguage,
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                ),
               ),
             ),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
 
-            SizedBox(height: 10),
+                  const Icon(
+                    Icons.favorite,
+                    color: Colors.pink,
+                    size: 90,
+                  ),
 
-            Text(
-              "Women's Health",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey,
+                  const SizedBox(height: 24),
+
+                  Text(
+                    t.appName,
+                    style: const TextStyle(
+                      fontSize: 34,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  Text(
+                    t.appTagline,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey,
+                    ),
+                  ),
+
+                ],
               ),
             ),
-
           ],
         ),
       ),

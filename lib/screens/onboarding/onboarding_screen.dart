@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../l10n/app_localizations.dart';
+
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -11,31 +13,33 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _controller = PageController();
   int currentPage = 0;
 
-  final pages = const [
+  List<Map<String, dynamic>> _pages(AppLocalizations t) => [
     {
       "icon": Icons.favorite,
-      "title": "Know Your Cycle",
-      "description": "Understand your period, ovulation and fertile window.",
+      "title": t.onboardTitle1,
+      "description": t.onboardDesc1,
     },
     {
       "icon": Icons.calendar_month,
-      "title": "Predict Your Period",
-      "description": "Get smart predictions for your next cycle.",
+      "title": t.onboardTitle2,
+      "description": t.onboardDesc2,
     },
     {
       "icon": Icons.edit_note,
-      "title": "Track Symptoms",
-      "description": "Log mood, pain, sleep, water and daily symptoms.",
+      "title": t.onboardTitle3,
+      "description": t.onboardDesc3,
     },
     {
       "icon": Icons.auto_awesome,
-      "title": "Dawrati AI",
-      "description": "Receive personalized insights every day.",
+      "title": t.onboardTitle4,
+      "description": t.onboardDesc4,
     },
   ];
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+    final pages = _pages(t);
     final isLast = currentPage == pages.length - 1;
 
     return Scaffold(
@@ -149,7 +153,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     }
                   },
                   child: Text(
-                    isLast ? "Get Started" : "Next",
+                    isLast ? t.getStarted : t.next,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w900,

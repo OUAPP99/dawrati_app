@@ -8,6 +8,12 @@ import '../screens/questionnaire/questionnaire_screen.dart';
 import '../features/main/main_navigation_screen.dart';
 import '../features/premium/premium_screen.dart';
 import '../features/ai/ai_coach_screen.dart';
+import '../features/notifications/notification_settings_screen.dart';
+import '../features/profile/privacy_screen.dart';
+import '../features/profile/cycle_settings_screen.dart';
+import '../features/profile/help_support_screen.dart';
+import '../features/referral/referral_screen.dart';
+import '../features/security/app_lock_settings_screen.dart';
 
 class AppRoutes {
   static const String splash = '/splash';
@@ -18,6 +24,12 @@ class AppRoutes {
   static const String home = '/home';
   static const String premium = '/premium';
   static const String aiCoach = '/ai-coach';
+  static const String notificationSettings = '/notification-settings';
+  static const String privacy = '/privacy';
+  static const String cycleSettings = '/cycle-settings';
+  static const String helpSupport = '/help-support';
+  static const String appLockSettings = '/app-lock-settings';
+  static const String referral = '/referral';
 
   static Map<String, WidgetBuilder> routes({
     required DateTime dateDebutRegles,
@@ -39,6 +51,12 @@ class AppRoutes {
           ),
           premium: (context) => const PremiumScreen(),
           aiCoach: (context) => const AiCoachScreen(),
+          notificationSettings: (context) => const NotificationSettingsScreen(),
+          privacy: (context) => const PrivacyScreen(),
+          cycleSettings: (context) => const CycleSettingsScreen(),
+          helpSupport: (context) => const HelpSupportScreen(),
+          appLockSettings: (context) => const AppLockSettingsScreen(),
+          referral: (context) => const ReferralScreen(),
     };
   }
 }

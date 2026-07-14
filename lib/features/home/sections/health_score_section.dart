@@ -23,9 +23,9 @@ class HealthScoreSection extends StatelessWidget {
     score += ((log.sleep / 8.0) * 25).clamp(0, 25).toInt();
 
     // Mood (20 pts)
-    if (log.mood.contains("Happy")) {
+    if (log.mood.contains("Amazing") || log.mood.contains("Good")) {
       score += 20;
-    } else if (log.mood.contains("Neutral")) {
+    } else if (log.mood.contains("Okay")) {
       score += 12;
     } else {
       score += 5;

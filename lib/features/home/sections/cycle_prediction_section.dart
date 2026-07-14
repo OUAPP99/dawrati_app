@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
+
 class CyclePredictionSection extends StatelessWidget {
-  final int cycleDay;
   final String phase;
+  final int daysUntilOvulation;
+  final VoidCallback? onSeeInsights;
 
   const CyclePredictionSection({
     super.key,
-    required this.cycleDay,
     required this.phase,
+    required this.daysUntilOvulation,
+    this.onSeeInsights,
   });
 
-  int get ovulationIn {
-    final days = 14 - cycleDay;
-    return days < 0 ? 0 : days;
-  }
+  int get ovulationIn => daysUntilOvulation;
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
     final isOvulation = phase == "Ovulation";
 
     return Container(
@@ -50,7 +52,7 @@ class CyclePredictionSection extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            isOvulation ? "Ovulation today" : "Ovulation in",
+            isOvulation ? t.ovulationToday : t.ovulationIn,
             style: const TextStyle(
               fontSize: 25,
               fontWeight: FontWeight.w800,
@@ -58,7 +60,7 @@ class CyclePredictionSection extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            isOvulation ? "Today" : "$ovulationIn Days",
+            isOvulation ? t.todayLabel : t.daysCount(ovulationIn),
             style: const TextStyle(
               fontSize: 68,
               fontWeight: FontWeight.w900,
@@ -74,10 +76,10 @@ class CyclePredictionSection extends StatelessWidget {
             ),
             child: Text(
               isOvulation
-                  ? "High chance of pregnancy"
+                  ? t.highChancePregnancy
                   : ovulationIn <= 3
-                      ? "Fertility is increasing"
-                      : "Low chance of getting pregnant",
+                      ? t.fertilityIncreasing
+                      : t.lowChancePregnancy,
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -86,10 +88,10 @@ class CyclePredictionSection extends StatelessWidget {
           ),
           const SizedBox(height: 28),
           TextButton(
-            onPressed: () {},
-            child: const Text(
-              "See your daily insights",
-              style: TextStyle(
+            onPressed: onSeeInsights,
+            child: Text(
+              t.seeDailyInsights,
+              style: const TextStyle(
                 color: Color(0xFFE91E63),
                 fontWeight: FontWeight.w900,
               ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
+
 class HomeActionsSection extends StatelessWidget {
   final VoidCallback? onLogPeriod;
   final VoidCallback? onSymptoms;
@@ -14,11 +16,13 @@ class HomeActionsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Row(
       children: [
         _action(
           icon: Icons.water_drop,
-          label: "Log period",
+          label: t.homeLogPeriod,
           color: const Color(0xFFE91E63),
           filled: true,
           onTap: onLogPeriod,
@@ -26,14 +30,14 @@ class HomeActionsSection extends StatelessWidget {
         const SizedBox(width: 18),
         _action(
           icon: Icons.add,
-          label: "Symptoms",
+          label: t.homeSymptoms,
           color: Colors.black87,
           onTap: onSymptoms,
         ),
         const SizedBox(width: 18),
         _action(
           icon: Icons.favorite_border,
-          label: "Sex",
+          label: t.homeSex,
           color: Colors.black87,
           onTap: onSex,
         ),

@@ -43,3 +43,18 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/build/
+
+# Claude Code local session state
+.claude/
+
+# Secrets
+.env
+env_config.txt
+
+# Android release signing (NEVER commit — losing this means you can never
+# update the app on Play Store again)
+android/key.properties
+android/app/upload-keystore.jks
+*.jks
+*.keystore

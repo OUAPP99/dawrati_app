@@ -1,20 +1,106 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../core/widgets/animated_tap.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../ai/ai_chat_screen.dart';
+import '../../app_state/app_state_provider.dart';
+import '../../subscription/subscription_provider.dart';
 
 class RecommendationSection extends StatelessWidget {
   const RecommendationSection({super.key});
 
+  void _openNutritionCoach(BuildContext context) {
+    final t = AppLocalizations.of(context);
+    final isPremium = context.read<SubscriptionProvider>().isPremium;
+    final appState = context.read<AppStateProvider>();
+    final weightKg = appState.weightKg;
+    final age = appState.age;
+
+    final languageName = switch (Localizations.localeOf(context).languageCode) {
+      'fr' => 'French',
+      'ar' => 'Arabic',
+      _ => 'English',
+    };
+
+    final knownWeightNote = weightKg != null ? 'Their weight is already known: ${weightKg.round()}kg. ' : '';
+    final knownAgeNote = age != null ? 'Their age is already known: $age. ' : '';
+
+    final systemContext =
+        "You are Dawrati's Nutrition Coach, a knowledgeable and encouraging "
+        'nutrition assistant inside the Dawrati app. Your ONLY topic is food, '
+        'nutrition, and calorie/goal calculations — politely decline and redirect '
+        'if the user asks about anything unrelated to nutrition (including general '
+        'cycle, symptom or medical questions). $knownWeightNote$knownAgeNote'
+        'If you do not yet have their height, activity level, and goal '
+        '(lose, maintain, or gain weight), ask for whichever of those you are '
+        'missing. Once you have enough information, estimate their daily '
+        'calorie needs and suggest a simple, practical eating approach to '
+        'reach their goal. Keep answers concise and practical. You are not a '
+        'doctor or registered dietitian — for medical conditions or '
+        'restrictive diets, suggest consulting a professional. Always '
+        'respond in $languageName.';
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => AiChatScreen(
+          systemContext: systemContext,
+          isPremium: isPremium,
+          title: t.nutritionCoachTitle,
+          starterMessage: t.nutritionCoachStarterMessage,
+        ),
+      ),
+    );
+  }
+
+  void _openSleepCoach(BuildContext context) {
+    final t = AppLocalizations.of(context);
+    final isPremium = context.read<SubscriptionProvider>().isPremium;
+
+    final languageName = switch (Localizations.localeOf(context).languageCode) {
+      'fr' => 'French',
+      'ar' => 'Arabic',
+      _ => 'English',
+    };
+
+    final systemContext =
+        "You are Dawrati's Sleep Coach, a calm and knowledgeable sleep "
+        'assistant inside the Dawrati app. Your ONLY topic is sleep — falling '
+        'asleep, staying asleep, sleep hygiene, and how the menstrual cycle '
+        'affects sleep — politely decline and redirect if the user asks about '
+        'anything unrelated to sleep. Ask follow-up questions about their sleep '
+        'habits and symptoms, then give practical, gentle suggestions to help '
+        'them sleep better. Keep answers concise and practical. You are not a '
+        'doctor — for a suspected sleep disorder, suggest consulting a '
+        'healthcare professional. Always respond in $languageName.';
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => AiChatScreen(
+          systemContext: systemContext,
+          isPremium: isPremium,
+          title: t.sleepCoachTitle,
+          starterMessage: t.sleepCoachStarterMessage,
+          premiumOnly: true,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Recommended for you",
-          style: TextStyle(
+        Text(
+          t.recommendedForYou,
+          style: const TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.w900,
           ),
@@ -25,8 +111,10 @@ class RecommendationSection extends StatelessWidget {
         _card(
           Colors.pink.shade50,
           Icons.auto_awesome,
-          "Dawrati AI",
-          "Your energy may decrease over the next 2 days. Prioritize sleep and hydration.",
+          t.dawratiAiLabel,
+          t.aiRecommendationText,
+          avatarImage: 'assets/images/articles/coach.png',
+          onTap: () => Navigator.pushNamed(context, '/ai-coach'),
         ),
 
         const SizedBox(height: 18),
@@ -34,8 +122,10 @@ class RecommendationSection extends StatelessWidget {
         _card(
           Colors.orange.shade50,
           Icons.restaurant,
-          "Nutrition",
-          "Foods rich in iron can help support your body during this phase.",
+          t.nutritionLabel,
+          t.nutritionRecommendationText,
+          avatarImage: 'assets/images/articles/Nutrition.png',
+          onTap: () => _openNutritionCoach(context),
         ),
 
         const SizedBox(height: 18),
@@ -43,8 +133,10 @@ class RecommendationSection extends StatelessWidget {
         _card(
           Colors.blue.shade50,
           Icons.nightlight_round,
-          "Sleep",
-          "Going to bed 30 minutes earlier may improve your recovery.",
+          t.sleepLabel,
+          t.sleepRecommendationText,
+          avatarImage: 'assets/images/articles/Sleep.png',
+          onTap: () => _openSleepCoach(context),
         ),
       ],
     );
@@ -54,11 +146,11 @@ class RecommendationSection extends StatelessWidget {
     Color color,
     IconData icon,
     String title,
-    String text,
-  ) {
-    return AnimatedTap(
-      onTap: () {},
-      child: Container(
+    String text, {
+    VoidCallback? onTap,
+    String? avatarImage,
+  }) {
+    final content = Container(
         padding: const EdgeInsets.all(22),
         decoration: BoxDecoration(
           color: color,
@@ -71,7 +163,8 @@ class RecommendationSection extends StatelessWidget {
             CircleAvatar(
               radius: 26,
               backgroundColor: Colors.white,
-              child: Icon(icon),
+              backgroundImage: avatarImage != null ? AssetImage(avatarImage) : null,
+              child: avatarImage != null ? null : Icon(icon),
             ),
 
             const SizedBox(width: 18),
@@ -101,7 +194,10 @@ class RecommendationSection extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
+      );
+
+    if (onTap == null) return content;
+
+    return AnimatedTap(onTap: onTap, child: content);
   }
 }

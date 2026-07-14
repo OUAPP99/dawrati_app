@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../core/widgets/animated_tap.dart';
+import '../../../l10n/app_localizations.dart';
 
 class SubscriptionPreviewSection extends StatelessWidget {
   final VoidCallback? onTap;
@@ -14,6 +15,8 @@ class SubscriptionPreviewSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return AnimatedTap(
       onTap: onTap,
       child: Container(
@@ -39,27 +42,27 @@ class SubscriptionPreviewSection extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 18),
-            const Expanded(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Dawrati Premium",
-                    style: TextStyle(
+                    t.premiumTitle,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 22,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
-                    "Unlock AI coach, advanced insights and unlimited history.",
-                    style: TextStyle(color: Colors.white70, fontSize: 15),
+                    t.premiumUnlockTextLong,
+                    style: const TextStyle(color: Colors.white70, fontSize: 15),
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   Text(
-                    "Try Premium →",
-                    style: TextStyle(
+                    t.tryPremium,
+                    style: const TextStyle(
                       color: Color(0xFFFFC1D6),
                       fontWeight: FontWeight.bold,
                     ),

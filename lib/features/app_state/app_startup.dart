@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../config/app_routes.dart';
+import '../partner/partner_dashboard_screen.dart';
+import '../partner/partner_mode_provider.dart';
 import 'app_state_provider.dart';
 
 class AppStartup extends StatefulWidget {
@@ -20,7 +22,19 @@ class _AppStartupState extends State<AppStartup> {
     });
   }
 
-  void _navigate() {
+  Future<void> _navigate() async {
+    final partnerMode = context.read<PartnerModeProvider>();
+    await partnerMode.load();
+    if (!mounted) return;
+
+    if (partnerMode.isPartnerMode) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const PartnerDashboardScreen()),
+      );
+      return;
+    }
+
     final appState = context.read<AppStateProvider>();
 
     if (appState.hasCompletedOnboarding) {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
+
 class SymptomsSelector extends StatelessWidget {
   final Set<String> selectedSymptoms;
   final ValueChanged<String> onToggle;
@@ -21,10 +23,35 @@ class SymptomsSelector extends StatelessWidget {
     ("Breast pain", Icons.favorite_border),
   ];
 
+  static String label(AppLocalizations t, String key) {
+    switch (key) {
+      case "Cramps":
+        return t.symptomCramps;
+      case "Bloating":
+        return t.symptomBloating;
+      case "Headache":
+        return t.symptomHeadache;
+      case "Back pain":
+        return t.symptomBackPain;
+      case "Acne":
+        return t.symptomAcne;
+      case "Fatigue":
+        return t.symptomFatigue;
+      case "Nausea":
+        return t.symptomNausea;
+      case "Breast pain":
+        return t.symptomBreastPain;
+      default:
+        return key;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return _section(
-      title: "Symptoms",
+      title: t.homeSymptoms,
       child: Wrap(
         spacing: 10,
         runSpacing: 10,
@@ -33,7 +60,7 @@ class SymptomsSelector extends StatelessWidget {
 
           return FilterChip(
             selected: selected,
-            label: Text(item.$1),
+            label: Text(label(t, item.$1)),
             avatar: Icon(
               item.$2,
               size: 18,

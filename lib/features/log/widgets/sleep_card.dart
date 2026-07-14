@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
+
 class SleepCard extends StatelessWidget {
   final double sleep;
   final ValueChanged<double> onChanged;
@@ -13,7 +15,7 @@ class SleepCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _card(
-      title: "Sleep",
+      title: AppLocalizations.of(context).sleepLabel,
       child: Column(
         children: [
           Text(

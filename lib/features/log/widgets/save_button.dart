@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
+
 class SaveButton extends StatelessWidget {
   final Future<void> Function() onSave;
 
@@ -18,9 +20,9 @@ class SaveButton extends StatelessWidget {
           await onSave();
         },
         icon: const Icon(Icons.check),
-        label: const Text(
-          "Save Log",
-          style: TextStyle(fontWeight: FontWeight.bold),
+        label: Text(
+          AppLocalizations.of(context).saveLog,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
     );

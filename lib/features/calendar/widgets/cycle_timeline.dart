@@ -2,17 +2,22 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
+import '../../../l10n/app_localizations.dart';
 
 class CycleTimeline extends StatelessWidget {
   final int cycleDay;
+  final int cycleLength;
 
   const CycleTimeline({
     super.key,
     required this.cycleDay,
+    this.cycleLength = 28,
   });
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -23,9 +28,9 @@ class CycleTimeline extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Cycle Timeline",
-            style: TextStyle(
+          Text(
+            t.cycleTimelineTitle,
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w900,
             ),
@@ -93,7 +98,7 @@ class CycleTimeline extends StatelessWidget {
               ),
 
               Positioned(
-                left: ((cycleDay - 1) / 28) * 310,
+                left: ((cycleDay - 1) / cycleLength).clamp(0.0, 1.0) * 310,
                 child: Container(
                   width: 24,
                   height: 24,
@@ -120,11 +125,11 @@ class CycleTimeline extends StatelessWidget {
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              _Legend(Color(0xFFE91E63), "Period"),
-              _Legend(Color(0xFFF48FB1), "Fertile"),
-              _Legend(Color(0xFF8E5BE8), "Ovulation"),
-              _Legend(Color(0xFFFFC45A), "Luteal"),
+            children: [
+              _Legend(const Color(0xFFE91E63), t.legendPeriod),
+              _Legend(const Color(0xFFF48FB1), t.legendFertile),
+              _Legend(const Color(0xFF8E5BE8), t.phaseOvulation),
+              _Legend(const Color(0xFFFFC45A), t.phaseLuteal),
             ],
           ),
         ],

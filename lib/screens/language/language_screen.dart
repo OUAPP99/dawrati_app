@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../features/app_state/app_state_provider.dart';
+import '../../l10n/app_localizations.dart';
 
 class LanguageScreen extends StatelessWidget {
   const LanguageScreen({super.key});
 
   void selectLanguage(BuildContext context, String lang) {
-    Navigator.pushReplacementNamed(
-      context,
-      '/onboarding',
-      arguments: lang,
-    );
+    context.read<AppStateProvider>().setLanguage(lang);
+
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    } else {
+      Navigator.pushReplacementNamed(context, '/onboarding');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final currentLang = context.watch<AppStateProvider>().languageCode;
+    final t = AppLocalizations.of(context);
+
     return Scaffold(
       backgroundColor: const Color(0xFFFFF7FA),
       body: SafeArea(
@@ -23,22 +32,22 @@ class LanguageScreen extends StatelessWidget {
               const Spacer(),
               const Icon(Icons.favorite_rounded, color: Colors.pink, size: 82),
               const SizedBox(height: 22),
-              const Text(
-                "دورتي",
-                style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+              Text(
+                t.appName,
+                style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              const Text(
-                "Choose your language",
-                style: TextStyle(fontSize: 18, color: Colors.grey),
+              Text(
+                t.chooseLanguageTitle,
+                style: const TextStyle(fontSize: 18, color: Colors.grey),
               ),
               const SizedBox(height: 45),
 
-              _button(context, "العربية", "ar"),
+              _button(context, "العربية", "ar", currentLang),
               const SizedBox(height: 16),
-              _button(context, "Français", "fr"),
+              _button(context, "Français", "fr", currentLang),
               const SizedBox(height: 16),
-              _button(context, "English", "en"),
+              _button(context, "English", "en", currentLang),
 
               const Spacer(),
             ],
@@ -48,13 +57,20 @@ class LanguageScreen extends StatelessWidget {
     );
   }
 
-  Widget _button(BuildContext context, String text, String lang) {
+  Widget _button(BuildContext context, String text, String lang, String currentLang) {
+    final selected = lang == currentLang;
+
     return SizedBox(
       width: double.infinity,
       height: 58,
-      child: ElevatedButton(
+      child: ElevatedButton.icon(
         onPressed: () => selectLanguage(context, lang),
-        child: Text(text, style: const TextStyle(fontSize: 20)),
+        icon: selected ? const Icon(Icons.check_circle, size: 20) : const SizedBox.shrink(),
+        label: Text(text, style: const TextStyle(fontSize: 20)),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: selected ? const Color(0xFFE91E63) : null,
+          foregroundColor: selected ? Colors.white : null,
+        ),
       ),
     );
   }

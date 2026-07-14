@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
+
 class DayScoreCard extends StatelessWidget {
   final double score;
 
@@ -31,9 +33,9 @@ class DayScoreCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Text(
-            "Today's Wellness",
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context).todaysWellness,
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w900,
             ),

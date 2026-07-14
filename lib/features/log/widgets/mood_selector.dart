@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/app_localizations.dart';
+
 class MoodSelector extends StatelessWidget {
   final String? selectedMood;
   final ValueChanged<String> onChanged;
@@ -18,14 +20,33 @@ class MoodSelector extends StatelessWidget {
     ("😭", "Awful"),
   ];
 
+  static String label(AppLocalizations t, String key) {
+    switch (key) {
+      case "Amazing":
+        return t.moodAmazing;
+      case "Good":
+        return t.moodGood;
+      case "Okay":
+        return t.moodOkay;
+      case "Sad":
+        return t.moodSad;
+      case "Awful":
+        return t.moodAwful;
+      default:
+        return key;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "How do you feel today?",
-          style: TextStyle(
+        Text(
+          t.howDoYouFeelToday,
+          style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w900,
           ),
@@ -36,10 +57,10 @@ class MoodSelector extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: moods.map((mood) {
-            final selected = selectedMood == mood.$2;
+            final selected = selectedMood == "${mood.$1} ${mood.$2}";
 
             return GestureDetector(
-              onTap: () => onChanged(mood.$2),
+              onTap: () => onChanged("${mood.$1} ${mood.$2}"),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 220),
                 width: 62,
@@ -74,7 +95,7 @@ class MoodSelector extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      mood.$2,
+                      label(t, mood.$2),
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w700,

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../log/models/daily_log_entry.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../l10n/label_translations.dart';
 
 class BottomSheetDay extends StatelessWidget {
   final DateTime date;
@@ -22,6 +25,9 @@ class BottomSheetDay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context);
+    final locale = Localizations.localeOf(context).toString();
+
     return DraggableScrollableSheet(
       initialChildSize: .82,
       maxChildSize: .95,
@@ -50,10 +56,42 @@ class BottomSheetDay extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 22),
+              const SizedBox(height: 18),
+
+              Center(
+                child: Hero(
+                  tag: 'calendarDay-${date.year}-${date.month}-${date.day}',
+                  child: Container(
+                    width: 54,
+                    height: 54,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFE91E63),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0x4DE91E63),
+                          blurRadius: 22,
+                          offset: Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      "${date.day}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                        fontSize: 17,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 14),
 
               Text(
-                "${date.day}/${date.month}/${date.year}",
+                DateFormat.yMd(locale).format(date),
                 style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 16,
@@ -63,7 +101,7 @@ class BottomSheetDay extends StatelessWidget {
               const SizedBox(height: 10),
 
               Text(
-                "Cycle Day $cycleDay",
+                t.cycleDayLabel(cycleDay),
                 style: const TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.w900,
@@ -73,7 +111,7 @@ class BottomSheetDay extends StatelessWidget {
               const SizedBox(height: 6),
 
               Text(
-                phase,
+                translatePhase(t, phase),
                 style: const TextStyle(
                   color: Colors.pink,
                   fontWeight: FontWeight.w700,
@@ -85,35 +123,38 @@ class BottomSheetDay extends StatelessWidget {
 
               _InfoCard(
                 icon: Icons.favorite,
-                title: "Chance of pregnancy",
-                value: cycleDay == 14
-                    ? "Peak"
-                    : cycleDay >= 11 && cycleDay <= 15
-                        ? "High"
-                        : "Low",
+                title: t.chanceOfPregnancy,
+                value: translateFertilityChance(
+                  t,
+                  cycleDay == 14
+                      ? "Peak"
+                      : cycleDay >= 11 && cycleDay <= 15
+                          ? "High"
+                          : "Low",
+                ),
               ),
 
               const SizedBox(height: 18),
 
               _InfoCard(
                 icon: Icons.psychology,
-                title: "Current phase",
-                value: phase,
+                title: t.currentPhaseShort,
+                value: translatePhase(t, phase),
               ),
 
               const SizedBox(height: 18),
 
               _InfoCard(
                 icon: Icons.water_drop,
-                title: "Cycle day",
+                title: t.cycleDayShort,
                 value: "$cycleDay",
               ),
 
               const SizedBox(height: 28),
 
-              const Text(
-                "Daily Log",
-                style: TextStyle(
+              Text(
+                t.dailyLogLabel,
+                style: const TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: 24,
                 ),
@@ -139,9 +180,9 @@ class BottomSheetDay extends StatelessWidget {
 
                       const SizedBox(height: 18),
 
-                      const Text(
-                        "No log for this day",
-                        style: TextStyle(
+                      Text(
+                        t.noLogForDayShort,
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -149,8 +190,8 @@ class BottomSheetDay extends StatelessWidget {
 
                       const SizedBox(height: 10),
 
-                      const Text(
-                        "Track symptoms, mood, sleep, water and more.",
+                      Text(
+                        t.trackMoreDetails,
                         textAlign: TextAlign.center,
                       ),
 
@@ -162,7 +203,7 @@ class BottomSheetDay extends StatelessWidget {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: const Text("Add Daily Log"),
+                          child: Text(t.addDailyLog),
                         ),
                       ),
 
@@ -170,8 +211,8 @@ class BottomSheetDay extends StatelessWidget {
 
                       OutlinedButton(
                         onPressed: onSetPeriodStart,
-                        child: const Text(
-                          "Set as period start",
+                        child: Text(
+                          t.setAsPeriodStart,
                         ),
                       ),
                     ],
@@ -189,10 +230,14 @@ class BottomSheetDay extends StatelessWidget {
                   child: Column(
                     children: [
 
-                            _Row("Mood", entry!.mood),
-                            _Row("Sleep", "${entry!.sleep.toStringAsFixed(1)} h"),
-                            _Row("Water", "${entry!.water.toStringAsFixed(1)} L"),
-                            _Row("Notes", "-"),
+                            _Row(t.moodLabel, translateMoodString(t, entry!.mood)),
+                            _Row(t.sleepLabel, "${entry!.sleep.toStringAsFixed(1)} h"),
+                            _Row(t.waterLabel, "${entry!.water.toStringAsFixed(1)} L"),
+                            if (entry!.weight != null)
+                              _Row(t.weightTitle, "${entry!.weight!.toStringAsFixed(1)} kg"),
+                            if (entry!.medications.isNotEmpty)
+                              _Row(t.medicationsTitle, entry!.medications.join(', ')),
+                            _Row(t.notesLabel, entry!.notes.isEmpty ? "-" : entry!.notes),
 
                     ],
                   ),
