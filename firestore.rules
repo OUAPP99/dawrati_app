@@ -14,21 +14,26 @@ service cloud.firestore {
 
       // Curated, partner-safe snapshot (phase, cycle day, mood, water,
       // sleep, premium flag — never raw logs or account info).
-      // The owner can write it; any signed-in user (including an
-      // anonymously-signed-in partner) can read it.
+      // The owner can write it; any signed-in user who already knows the
+      // exact path (i.e. resolved it via a partnerLinks code lookup) can
+      // fetch it. `list`/collectionGroup enumeration is denied so no one
+      // can bulk-read every user's snapshot without a code.
       match /partnerView/{document=**} {
-        allow read: if request.auth != null;
+        allow get: if request.auth != null;
+        allow list: if false;
         allow write: if request.auth != null && request.auth.uid == uid;
       }
 
       // Referral rewards someone else's device deposits here when they
       // redeem this user's code. The owner reads and deletes their own
-      // credits once claimed; anyone signed in can create one (for a
-      // friend they just referred), capped at a sane number of days so
-      // no one can grant themselves unlimited Premium.
+      // credits once claimed. Creation requires the caller to be a
+      // different account than the one being credited, so no one can
+      // grant themselves Premium by writing to their own uid — capped at
+      // a sane number of days per credit as a second layer of defense.
       match /referralCredits/{creditId} {
         allow read, delete: if request.auth != null && request.auth.uid == uid;
         allow create: if request.auth != null
+                      && request.auth.uid != uid
                       && request.resource.data.days is int
                       && request.resource.data.days > 0
                       && request.resource.data.days <= 30;
@@ -36,11 +41,13 @@ service cloud.firestore {
       }
     }
 
-    // Maps a short partner code -> the owning user's uid. Any signed-in
-    // user can look up a code; only the owner can create/claim their own
-    // code, and it can never be reassigned once created.
+    // Maps a short partner code -> the owning user's uid. Lookups require
+    // knowing the exact code (get); listing/enumerating every code is
+    // denied so the full code->uid map can't be harvested. Only the owner
+    // can create/claim their own code, and it can never be reassigned.
     match /partnerLinks/{code} {
-      allow read: if request.auth != null;
+      allow get: if request.auth != null;
+      allow list: if false;
       allow create: if request.auth != null
                     && request.auth.uid == request.resource.data.ownerUid;
       allow update, delete: if false;
@@ -48,7 +55,8 @@ service cloud.firestore {
 
     // Same pattern as partnerLinks, for referral codes.
     match /referralCodes/{code} {
-      allow read: if request.auth != null;
+      allow get: if request.auth != null;
+      allow list: if false;
       allow create: if request.auth != null
                     && request.auth.uid == request.resource.data.ownerUid;
       allow update, delete: if false;
