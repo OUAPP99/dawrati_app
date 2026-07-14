@@ -84,7 +84,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           );
         },
         layoutBuilder: (currentChild, previousChildren) => Stack(
-          children: [...previousChildren, if (currentChild != null) currentChild],
+          children: [...previousChildren, ?currentChild],
         ),
         child: KeyedSubtree(
           key: ValueKey<int>(currentIndex),
