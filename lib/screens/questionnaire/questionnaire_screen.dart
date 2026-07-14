@@ -78,8 +78,8 @@ Future<void> next() async {
     final pages = [
       _sliderQuestion(t.qAge, age, 10, 75, "", (v) => setState(() => age = v)),
       _dateQuestion(t),
-      _sliderQuestion(t.qPeriodLength, periodLength, 1, 10, " days", (v) => setState(() => periodLength = v)),
-      _sliderQuestion(t.qCycleLength, cycleLength, 21, 40, " days", (v) => setState(() => cycleLength = v)),
+      _sliderQuestion(t.qPeriodLength, periodLength, 1, 10, " days", (v) => setState(() => periodLength = v), formatValue: (v) => t.daysCount(v)),
+      _sliderQuestion(t.qCycleLength, cycleLength, 21, 40, " days", (v) => setState(() => cycleLength = v), formatValue: (v) => t.daysCount(v)),
       _choiceQuestion(t.qGoal, {
         'trackCycle': t.goalTrackCycle,
         'getPregnant': t.goalGetPregnant,
@@ -162,20 +162,23 @@ Future<void> next() async {
     double min,
     double max,
     String suffix,
-    ValueChanged<double> onChanged,
-  ) {
+    ValueChanged<double> onChanged, {
+    String Function(int value)? formatValue,
+  }) {
+    final label = formatValue != null ? formatValue(value.round()) : "${value.round()}$suffix";
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
         const SizedBox(height: 30),
-        Text("${value.round()}$suffix", style: TextStyle(fontSize: 58, fontWeight: FontWeight.bold, color: Colors.pink.shade700)),
+        Text(label, style: TextStyle(fontSize: 58, fontWeight: FontWeight.bold, color: Colors.pink.shade700)),
         Slider(
           value: value,
           min: min,
           max: max,
           divisions: (max - min).round(),
-          label: "${value.round()}$suffix",
+          label: label,
           onChanged: onChanged,
         ),
       ],
