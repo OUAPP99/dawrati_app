@@ -4,6 +4,7 @@ import '../../core/widgets/hayati_progress.dart';
 import 'package:provider/provider.dart';
 import '../../features/app_state/app_state_provider.dart';
 import '../../features/cycle/cycle_provider.dart';
+import '../../core/theme/app_color_scheme.dart';
 import '../../l10n/app_localizations.dart';
 
 class QuestionnaireScreen extends StatefulWidget {
@@ -77,38 +78,38 @@ Future<void> next() async {
 
     final pages = [
       _sliderQuestion(t.qAge, age, 10, 75, "", (v) => setState(() => age = v)),
-      _dateQuestion(t),
+      _dateQuestion(context, t),
       _sliderQuestion(t.qPeriodLength, periodLength, 1, 10, " days", (v) => setState(() => periodLength = v), formatValue: (v) => t.daysCount(v)),
       _sliderQuestion(t.qCycleLength, cycleLength, 21, 40, " days", (v) => setState(() => cycleLength = v), formatValue: (v) => t.daysCount(v)),
-      _choiceQuestion(t.qGoal, {
+      _choiceQuestion(context, t.qGoal, {
         'trackCycle': t.goalTrackCycle,
         'getPregnant': t.goalGetPregnant,
         'avoidPregnancy': t.goalAvoidPregnancy,
         'understandHealth': t.goalUnderstandHealth,
       }, goal, (v) => setState(() => goal = v)),
-      _choiceQuestion(t.qContraception, {
+      _choiceQuestion(context, t.qContraception, {
         'none': t.contraceptionNone,
         'pill': t.contraceptionPill,
         'iud': t.contraceptionIUD,
         'implant': t.contraceptionImplant,
         'other': t.contraceptionOther,
       }, contraception, (v) => setState(() => contraception = v)),
-      _choiceQuestion(t.qStress, {
+      _choiceQuestion(context, t.qStress, {
         'low': t.stressLow,
         'medium': t.stressMedium,
         'high': t.stressHigh,
       }, stress, (v) => setState(() => stress = v)),
-      _choiceQuestion(t.qSleep, {
+      _choiceQuestion(context, t.qSleep, {
         'less6': t.sleepLess6,
         '6to8': t.sleep6to8,
         'more8': t.sleepMore8,
       }, sleep, (v) => setState(() => sleep = v)),
       _sliderQuestion(t.qWeight, weight, 35, 140, " kg", (v) => setState(() => weight = v)),
-      _finishQuestion(t),
+      _finishQuestion(context, t),
     ];
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: context.colors.background,
       body: SafeArea(
         child: Stack(
           children: [
@@ -185,10 +186,11 @@ Future<void> next() async {
     );
   }
 
-  Widget _dateQuestion(AppLocalizations t) {
+  Widget _dateQuestion(BuildContext context, AppLocalizations t) {
     final label = lastPeriodDate == null
         ? t.selectDate
         : "${lastPeriodDate!.day}/${lastPeriodDate!.month}/${lastPeriodDate!.year}";
+    final colors = context.colors;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -200,7 +202,7 @@ Future<void> next() async {
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.all(22),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(22)),
+            decoration: BoxDecoration(color: colors.surface, borderRadius: BorderRadius.circular(22)),
             child: Row(
               children: [
                 Icon(Icons.calendar_month, color: Colors.pink.shade400),
@@ -217,11 +219,13 @@ Future<void> next() async {
   }
 
   Widget _choiceQuestion(
+    BuildContext context,
     String title,
     Map<String, String> options,
     String? selected,
     ValueChanged<String> onSelected,
   ) {
+    final colors = context.colors;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -236,7 +240,7 @@ Future<void> next() async {
               margin: const EdgeInsets.only(bottom: 14),
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                color: isSelected ? Colors.pink.shade100 : Colors.white,
+                color: isSelected ? Colors.pink.shade100 : colors.surface,
                 borderRadius: BorderRadius.circular(18),
                 border: Border.all(color: isSelected ? Colors.pink : Colors.pink.shade100, width: 1.5),
               ),
@@ -248,7 +252,7 @@ Future<void> next() async {
     );
   }
 
-  Widget _finishQuestion(AppLocalizations t) {
+  Widget _finishQuestion(BuildContext context, AppLocalizations t) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -256,7 +260,7 @@ Future<void> next() async {
         const SizedBox(height: 25),
         Text(t.profileReadyTitle, textAlign: TextAlign.center, style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
         const SizedBox(height: 12),
-        Text(t.profileReadyDesc, textAlign: TextAlign.center, style: const TextStyle(color: Colors.grey, fontSize: 16)),
+        Text(t.profileReadyDesc, textAlign: TextAlign.center, style: TextStyle(color: context.colors.textSecondary, fontSize: 16)),
       ],
     );
   }

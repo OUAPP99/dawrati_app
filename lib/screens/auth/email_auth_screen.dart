@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import '../../features/app_state/app_state_provider.dart';
 import '../../features/auth/auth_provider.dart';
 import '../../l10n/app_localizations.dart';
@@ -101,9 +102,10 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final auth = context.watch<AuthProvider>();
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: colors.background,
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(28, 20, 28, 40),
@@ -130,7 +132,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
               decoration: InputDecoration(
                 labelText: t.emailLabel,
                 filled: true,
-                fillColor: Colors.white,
+                fillColor: colors.surface,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(18),
                   borderSide: BorderSide.none,
@@ -145,7 +147,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen> {
               decoration: InputDecoration(
                 labelText: t.passwordLabel,
                 filled: true,
-                fillColor: Colors.white,
+                fillColor: colors.surface,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(18),
                   borderSide: BorderSide.none,

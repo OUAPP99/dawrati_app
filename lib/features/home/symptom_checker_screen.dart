@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import '../../l10n/app_localizations.dart';
 import '../ai/ai_usage_limiter.dart';
 import '../ai/flowing_text.dart';
@@ -130,9 +131,10 @@ class _SymptomCheckerScreenState extends State<SymptomCheckerScreen> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final limitReached = !isPremium && remainingFree <= 0;
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: colors.background,
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 18, 22, 40),
@@ -153,14 +155,14 @@ class _SymptomCheckerScreenState extends State<SymptomCheckerScreen> {
                 if (!isPremium)
                   Text(
                     t.aiFreeMessagesLeft(remainingFree),
-                    style: const TextStyle(fontSize: 11, color: Colors.grey),
+                    style: TextStyle(fontSize: 11, color: colors.textSecondary),
                   ),
               ],
             ),
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.only(left: 8),
-              child: Text(t.selectSymptomsPrompt, style: const TextStyle(color: Colors.grey)),
+              child: Text(t.selectSymptomsPrompt, style: TextStyle(color: colors.textSecondary)),
             ),
             const SizedBox(height: 20),
 
@@ -178,13 +180,13 @@ class _SymptomCheckerScreenState extends State<SymptomCheckerScreen> {
                     color: isSelected ? Colors.white : const Color(0xFFE91E63),
                   ),
                   selectedColor: const Color(0xFFE91E63),
-                  backgroundColor: Colors.white,
+                  backgroundColor: colors.surface,
                   labelStyle: TextStyle(
-                    color: isSelected ? Colors.white : Colors.black87,
+                    color: isSelected ? Colors.white : colors.textPrimary,
                     fontWeight: FontWeight.w700,
                   ),
                   side: BorderSide(
-                    color: isSelected ? const Color(0xFFE91E63) : Colors.grey.shade200,
+                    color: isSelected ? const Color(0xFFE91E63) : colors.divider,
                   ),
                   onSelected: (_) => setState(() {
                     isSelected ? selected.remove(item.$1) : selected.add(item.$1);
@@ -206,7 +208,7 @@ class _SymptomCheckerScreenState extends State<SymptomCheckerScreen> {
                     labelText: t.symptomNotesLabel,
                     hintText: isPremium ? t.symptomNotesHint : null,
                     filled: true,
-                    fillColor: Colors.white,
+                    fillColor: colors.surface,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(18),
                       borderSide: BorderSide.none,
@@ -217,7 +219,7 @@ class _SymptomCheckerScreenState extends State<SymptomCheckerScreen> {
                 if (!isPremium)
                   Positioned.fill(
                     child: Material(
-                      color: Colors.white,
+                      color: colors.surface,
                       borderRadius: BorderRadius.circular(18),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(18),
@@ -305,7 +307,7 @@ class _SymptomCheckerScreenState extends State<SymptomCheckerScreen> {
               Container(
                 padding: const EdgeInsets.all(22),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: colors.surface,
                   borderRadius: BorderRadius.circular(30),
                   boxShadow: [
                     BoxShadow(color: Colors.black.withValues(alpha: .05), blurRadius: 24, offset: const Offset(0, 10)),
@@ -332,7 +334,7 @@ class _SymptomCheckerScreenState extends State<SymptomCheckerScreen> {
             Text(
               t.notDiagnosisTool,
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
+              style: TextStyle(color: colors.textSecondary, fontSize: 13),
             ),
           ],
         ),

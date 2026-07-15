@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import '../../features/app_state/app_state_provider.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -23,7 +24,7 @@ class LanguageScreen extends StatelessWidget {
     final t = AppLocalizations.of(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: context.colors.background,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -39,7 +40,7 @@ class LanguageScreen extends StatelessWidget {
               const SizedBox(height: 10),
               Text(
                 t.chooseLanguageTitle,
-                style: const TextStyle(fontSize: 18, color: Colors.grey),
+                style: TextStyle(fontSize: 18, color: context.colors.textSecondary),
               ),
               const SizedBox(height: 45),
 

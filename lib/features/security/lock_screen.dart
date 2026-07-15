@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import '../../l10n/app_localizations.dart';
 import 'app_lock_provider.dart';
 import 'widgets/pin_keypad.dart';
@@ -67,9 +68,10 @@ class _LockScreenState extends State<LockScreen> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final appLock = context.watch<AppLockProvider>();
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: colors.background,
       body: SafeArea(
         child: Center(
           child: Column(
@@ -82,7 +84,7 @@ class _LockScreenState extends State<LockScreen> {
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
-                  color: error ? Colors.red : Colors.black87,
+                  color: error ? Colors.red : colors.textPrimary,
                 ),
               ),
               const SizedBox(height: 24),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import '../../l10n/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -41,9 +42,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final t = AppLocalizations.of(context);
     final pages = _pages(t);
     final isLast = currentPage == pages.length - 1;
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: colors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -104,9 +106,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         Text(
                           page["description"] as String,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 18,
-                            color: Colors.black54,
+                            color: colors.textSecondary,
                             height: 1.45,
                           ),
                         ),

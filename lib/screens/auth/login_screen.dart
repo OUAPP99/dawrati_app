@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import '../../features/app_state/app_state_provider.dart';
 import '../../features/auth/auth_provider.dart';
 import '../../features/partner/partner_entry_screen.dart';
@@ -63,9 +64,10 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: colors.background,
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(28, 30, 28, 40),
@@ -110,9 +112,9 @@ class LoginScreen extends StatelessWidget {
             Text(
               t.welcomeSubtitle,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 17,
-                color: Colors.black54,
+                color: colors.textSecondary,
                 height: 1.5,
               ),
             ),
@@ -185,10 +187,10 @@ class LoginScreen extends StatelessWidget {
             Center(
               child: TextButton.icon(
                 onPressed: () => _openPartnerEntry(context),
-                icon: const Icon(Icons.favorite_border, size: 18, color: Colors.grey),
+                icon: Icon(Icons.favorite_border, size: 18, color: colors.textSecondary),
                 label: Text(
                   t.partnerEntryLink,
-                  style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.grey),
+                  style: TextStyle(fontWeight: FontWeight.w600, color: colors.textSecondary),
                 ),
               ),
             ),

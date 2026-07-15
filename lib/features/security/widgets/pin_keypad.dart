@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
+
 class PinKeypad extends StatelessWidget {
   final ValueChanged<String> onDigit;
   final VoidCallback onBackspace;
@@ -28,7 +30,7 @@ class PinKeypad extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 6),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: row.map((d) => _key(Text(d, style: _digitStyle), () => onDigit(d))).toList(),
+              children: row.map((d) => _key(context, Text(d, style: _digitStyle), () => onDigit(d))).toList(),
             ),
           ),
         Padding(
@@ -36,9 +38,9 @@ class PinKeypad extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _key(extraAction ?? const SizedBox(width: 70, height: 70), extraAction == null ? null : () {}),
-              _key(Text('0', style: _digitStyle), () => onDigit('0')),
-              _key(const Icon(Icons.backspace_outlined), onBackspace),
+              _key(context, extraAction ?? const SizedBox(width: 70, height: 70), extraAction == null ? null : () {}),
+              _key(context, Text('0', style: _digitStyle), () => onDigit('0')),
+              _key(context, const Icon(Icons.backspace_outlined), onBackspace),
             ],
           ),
         ),
@@ -48,14 +50,14 @@ class PinKeypad extends StatelessWidget {
 
   static const _digitStyle = TextStyle(fontSize: 26, fontWeight: FontWeight.w700);
 
-  Widget _key(Widget child, VoidCallback? onTap) {
+  Widget _key(BuildContext context, Widget child, VoidCallback? onTap) {
     return SizedBox(
       width: 70,
       height: 70,
       child: onTap == null && child is SizedBox
           ? child
           : Material(
-              color: Colors.white,
+              color: context.colors.surface,
               shape: const CircleBorder(),
               child: InkWell(
                 customBorder: const CircleBorder(),
@@ -87,7 +89,7 @@ class PinDots extends StatelessWidget {
         final isFilled = i < filled;
         final color = error
             ? Colors.red
-            : (isFilled ? const Color(0xFFE91E63) : Colors.grey.shade300);
+            : (isFilled ? const Color(0xFFE91E63) : context.colors.divider);
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 8),
           width: 16,
