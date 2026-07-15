@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../l10n/app_localizations.dart';
@@ -15,11 +16,12 @@ class CycleHistorySection extends StatelessWidget {
     final cycle = context.watch<CycleProvider>();
     final log = context.watch<DailyLogProvider>();
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(AppRadius.card),
         boxShadow: AppShadows.soft,
       ),
@@ -28,7 +30,10 @@ class CycleHistorySection extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(t.myCycleTitle, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900)),
+              Text(
+                t.myCycleTitle,
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: colors.textPrimary),
+              ),
               if (log.currentStreak >= 2) ...[
                 const SizedBox(width: 10),
                 _streakBadge(t, log.currentStreak),
@@ -36,10 +41,10 @@ class CycleHistorySection extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 18),
-          _row(t.currentDay, t.dayLabel(cycle.cycleDay)),
-          _row(t.currentPhase, cycle.phase),
-          _row(t.averageCycle, t.daysCount(cycle.averageCycleLength)),
-          _row(t.logsSaved, "${log.history.length}"),
+          _row(context, t.currentDay, t.dayLabel(cycle.cycleDay)),
+          _row(context, t.currentPhase, cycle.phase),
+          _row(context, t.averageCycle, t.daysCount(cycle.averageCycleLength)),
+          _row(context, t.logsSaved, "${log.history.length}"),
           if (cycle.isIrregular) ...[
             const SizedBox(height: 6),
             _irregularityNotice(t),
@@ -104,14 +109,15 @@ class CycleHistorySection extends StatelessWidget {
     );
   }
 
-  Widget _row(String title, String value) {
+  Widget _row(BuildContext context, String title, String value) {
+    final colors = context.colors;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 13),
       child: Row(
         children: [
-          Text(title, style: const TextStyle(fontSize: 17, color: Colors.black54)),
+          Text(title, style: TextStyle(fontSize: 17, color: colors.textSecondary)),
           const Spacer(),
-          Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+          Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: colors.textPrimary)),
         ],
       ),
     );

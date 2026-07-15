@@ -526,6 +526,36 @@ abstract class AppLocalizations {
   /// **'اللغة'**
   String get settingsLanguage;
 
+  /// No description provided for @settingsTheme.
+  ///
+  /// In ar, this message translates to:
+  /// **'المظهر'**
+  String get settingsTheme;
+
+  /// No description provided for @chooseThemeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختاري المظهر'**
+  String get chooseThemeTitle;
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In ar, this message translates to:
+  /// **'تلقائي (حسب النظام)'**
+  String get themeSystem;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاتح'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In ar, this message translates to:
+  /// **'داكن'**
+  String get themeDark;
+
   /// No description provided for @settingsNotifications.
   ///
   /// In ar, this message translates to:

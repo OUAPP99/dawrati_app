@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../l10n/app_localizations.dart';
 
 class DayScoreCard extends StatelessWidget {
@@ -18,10 +19,11 @@ class DayScoreCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
@@ -53,7 +55,7 @@ class DayScoreCard extends StatelessWidget {
                   value: score / 10,
                   strokeWidth: 10,
                   color: color,
-                  backgroundColor: Colors.grey.shade200,
+                  backgroundColor: colors.divider,
                 ),
               ),
 

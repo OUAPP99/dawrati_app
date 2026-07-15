@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/widgets/animated_tap.dart';
 import '../../core/widgets/fade_slide.dart';
 import '../../l10n/app_localizations.dart';
 import '../../l10n/label_translations.dart';
 import '../app_state/app_state_provider.dart';
+import '../app_state/theme_provider.dart';
 import '../cycle/cycle_provider.dart';
 import '../log/provider/daily_log_provider.dart';
 import '../partner/partner_code_screen.dart';
@@ -25,14 +27,18 @@ class ProfileScreen extends StatelessWidget {
     final log = context.watch<DailyLogProvider>();
     final isPremium = context.watch<SubscriptionProvider>().isPremium;
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: colors.background,
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 18, 22, 120),
           children: [
-            Text(t.profileTitle, style: const TextStyle(fontSize: 34, fontWeight: FontWeight.w900)),
+            Text(
+              t.profileTitle,
+              style: TextStyle(fontSize: 34, fontWeight: FontWeight.w900, color: colors.textPrimary),
+            ),
             const SizedBox(height: 24),
             FadeSlide(delay: 0, child: _profileHeader(context, t, isPremium)),
             const SizedBox(height: 22),
@@ -42,6 +48,7 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _statCard(
+                      context,
                       t.cycleLabel,
                       t.dayLabel(cycle.cycleDay),
                       Icons.favorite,
@@ -52,6 +59,7 @@ class ProfileScreen extends StatelessWidget {
                   const SizedBox(width: 14),
                   Expanded(
                     child: _statCard(
+                      context,
                       t.phaseLabel,
                       translatePhase(t, cycle.phase),
                       Icons.spa,
@@ -67,9 +75,9 @@ class ProfileScreen extends StatelessWidget {
               delay: 140,
               child: Row(
                 children: [
-                  Expanded(child: _statCard(t.waterLabel, "${log.water.toStringAsFixed(1)}L", Icons.water_drop, Colors.blue)),
+                  Expanded(child: _statCard(context, t.waterLabel, "${log.water.toStringAsFixed(1)}L", Icons.water_drop, Colors.blue)),
                   const SizedBox(width: 14),
-                  Expanded(child: _statCard(t.sleepLabel, "${log.sleep.toStringAsFixed(1)}h", Icons.bedtime, Colors.indigo)),
+                  Expanded(child: _statCard(context, t.sleepLabel, "${log.sleep.toStringAsFixed(1)}h", Icons.bedtime, Colors.indigo)),
                 ],
               ),
             ),
@@ -84,26 +92,37 @@ class ProfileScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _sectionTitle(t.settingsTitle),
+                  _sectionTitle(context, t.settingsTitle),
                   _item(
+                    context,
                     Icons.language,
                     t.settingsLanguage,
                     _languageLabel(context.watch<AppStateProvider>().languageCode),
                     onTap: () => Navigator.pushNamed(context, '/language'),
                   ),
                   _item(
+                    context,
+                    Icons.palette_outlined,
+                    t.settingsTheme,
+                    _themeLabel(t, context.watch<ThemeProvider>().themeMode),
+                    onTap: () => Navigator.pushNamed(context, '/theme'),
+                  ),
+                  _item(
+                    context,
                     Icons.notifications_none,
                     t.settingsNotifications,
                     t.settingsNotificationsDesc,
                     onTap: () => Navigator.pushNamed(context, '/notification-settings'),
                   ),
                   _item(
+                    context,
                     Icons.lock_outline,
                     t.settingsPrivacy,
                     t.settingsPrivacyDesc,
                     onTap: () => Navigator.pushNamed(context, '/privacy'),
                   ),
                   _item(
+                    context,
                     Icons.pin_outlined,
                     t.settingsAppLock,
                     context.watch<AppLockProvider>().isLockEnabled
@@ -112,12 +131,14 @@ class ProfileScreen extends StatelessWidget {
                     onTap: () => Navigator.pushNamed(context, '/app-lock-settings'),
                   ),
                   _item(
+                    context,
                     Icons.favorite_border,
                     t.settingsCycle,
                     t.settingsCycleDesc,
                     onTap: () => Navigator.pushNamed(context, '/cycle-settings'),
                   ),
                   _item(
+                    context,
                     Icons.people_outline,
                     t.settingsPartner,
                     t.settingsPartnerDesc,
@@ -127,6 +148,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   _item(
+                    context,
                     Icons.card_giftcard_outlined,
                     t.settingsReferral,
                     t.settingsReferralDesc,
@@ -134,18 +156,21 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   if (!kIsWeb && Platform.isAndroid)
                     _item(
+                      context,
                       Icons.widgets_outlined,
                       t.settingsWidget,
                       t.settingsWidgetDesc,
                       onTap: () => _addHomeWidget(context, t),
                     ),
                   _item(
+                    context,
                     Icons.help_outline,
                     t.settingsHelp,
                     t.settingsHelpDesc,
                     onTap: () => Navigator.pushNamed(context, '/help-support'),
                   ),
                   _item(
+                    context,
                     Icons.logout,
                     t.settingsLogout,
                     t.settingsLogoutDesc,
@@ -199,12 +224,13 @@ class ProfileScreen extends StatelessWidget {
   }
 
   Widget _profileHeader(BuildContext context, AppLocalizations t, bool isPremium) {
+    final colors = context.colors;
     return AnimatedTap(
       onTap: () => Navigator.pushNamed(context, '/cycle-settings'),
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(32),
           boxShadow: [
             BoxShadow(
@@ -226,7 +252,10 @@ class ProfileScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(t.appName, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900)),
+                  Text(
+                    t.appName,
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: colors.textPrimary),
+                  ),
                   const SizedBox(height: 4),
                   if (isPremium)
                     Row(
@@ -241,31 +270,36 @@ class ProfileScreen extends StatelessWidget {
                       ],
                     )
                   else
-                    Text(t.freePlan, style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600)),
+                    Text(t.freePlan, style: TextStyle(color: colors.textSecondary, fontWeight: FontWeight.w600)),
                 ],
               ),
             ),
-            const Icon(Icons.edit_outlined, color: Colors.grey),
+            Icon(Icons.edit_outlined, color: colors.textSecondary),
           ],
         ),
       ),
     );
   }
 
-  Widget _statCard(String title, String value, IconData icon, Color color, {VoidCallback? onTap}) {
+  Widget _statCard(BuildContext context, String title, String value, IconData icon, Color color, {VoidCallback? onTap}) {
+    final colors = context.colors;
     final content = Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(28),
       ),
       child: Column(
         children: [
           Icon(icon, color: color, size: 30),
           const SizedBox(height: 10),
-          Text(value, textAlign: TextAlign.center, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
+          Text(
+            value,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: colors.textPrimary),
+          ),
           const SizedBox(height: 4),
-          Text(title, style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w700)),
+          Text(title, style: TextStyle(color: colors.textSecondary, fontWeight: FontWeight.w700)),
         ],
       ),
     );
@@ -344,10 +378,13 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _sectionTitle(String text) {
+  Widget _sectionTitle(BuildContext context, String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
-      child: Text(text, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),
+      child: Text(
+        text,
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: context.colors.textPrimary),
+      ),
     );
   }
 
@@ -362,14 +399,26 @@ class ProfileScreen extends StatelessWidget {
     }
   }
 
-  Widget _item(IconData icon, String title, String subtitle, {VoidCallback? onTap}) {
+  String _themeLabel(AppLocalizations t, ThemeMode mode) {
+    switch (mode) {
+      case ThemeMode.light:
+        return t.themeLight;
+      case ThemeMode.dark:
+        return t.themeDark;
+      case ThemeMode.system:
+        return t.themeSystem;
+    }
+  }
+
+  Widget _item(BuildContext context, IconData icon, String title, String subtitle, {VoidCallback? onTap}) {
+    final colors = context.colors;
     return AnimatedTap(
       onTap: onTap ?? () {},
       child: Container(
         margin: const EdgeInsets.only(bottom: 14),
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(22),
         ),
         child: Row(
@@ -380,13 +429,16 @@ class ProfileScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                  Text(
+                    title,
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: colors.textPrimary),
+                  ),
                   const SizedBox(height: 4),
-                  Text(subtitle, style: const TextStyle(color: Colors.grey)),
+                  Text(subtitle, style: TextStyle(color: colors.textSecondary)),
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right),
+            Icon(Icons.chevron_right, color: colors.textSecondary),
           ],
         ),
       ),

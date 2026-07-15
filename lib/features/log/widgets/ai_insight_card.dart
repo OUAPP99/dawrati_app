@@ -46,6 +46,7 @@ class AIInsightCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
+                    color: Color(0xFF1F2937),
                   ),
                 ),
 
@@ -53,7 +54,7 @@ class AIInsightCard extends StatelessWidget {
 
                 Text(
                   insight,
-                  style: const TextStyle(height: 1.5),
+                  style: const TextStyle(height: 1.5, color: Color(0xFF1F2937)),
                 ),
               ],
             ),

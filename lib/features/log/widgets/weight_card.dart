@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../l10n/app_localizations.dart';
 
 class WeightCard extends StatelessWidget {
@@ -20,8 +21,10 @@ class WeightCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final value = weight ?? defaultValue;
+    final colors = context.colors;
 
     return _card(
+      context,
       title: t.weightTitle,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -34,7 +37,7 @@ class WeightCard extends StatelessWidget {
             width: 140,
             padding: const EdgeInsets.symmetric(vertical: 16),
             decoration: BoxDecoration(
-              color: const Color(0xFFFFF7FA),
+              color: colors.background,
               borderRadius: BorderRadius.circular(22),
             ),
             child: Column(
@@ -45,7 +48,7 @@ class WeightCard extends StatelessWidget {
                   style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
                 ),
                 if (weight == null)
-                  Text(t.notRecorded, style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                  Text(t.notRecorded, style: TextStyle(fontSize: 11, color: colors.textSecondary)),
               ],
             ),
           ),
@@ -58,11 +61,11 @@ class WeightCard extends StatelessWidget {
     );
   }
 
-  Widget _card({required String title, required Widget child}) {
+  Widget _card(BuildContext context, {required String title, required Widget child}) {
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(

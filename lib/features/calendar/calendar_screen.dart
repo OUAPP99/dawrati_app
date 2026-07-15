@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/widgets/fade_slide.dart';
 import '../cycle/cycle_provider.dart';
 import '../log/models/daily_log_entry.dart';
@@ -125,7 +126,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     final selectedEntry = findEntry(log.history, selectedDate);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: context.colors.background,
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(18, 18, 18, 120),

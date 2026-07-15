@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../l10n/app_localizations.dart';
@@ -16,11 +17,12 @@ class DailyLogPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(AppRadius.card),
         boxShadow: AppShadows.soft,
       ),
@@ -36,13 +38,13 @@ class DailyLogPreview extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           if (entry == null)
-            _empty(t)
+            _empty(context, t)
           else
             Row(
               children: [
-                _metric(entry!.mood.split(" ").first, t.moodLabel),
-                _metric("${entry!.water.toStringAsFixed(1)}L", t.waterLabel),
-                _metric("${entry!.sleep.toStringAsFixed(1)}h", t.sleepLabel),
+                _metric(context, entry!.mood.split(" ").first, t.moodLabel),
+                _metric(context, "${entry!.water.toStringAsFixed(1)}L", t.waterLabel),
+                _metric(context, "${entry!.sleep.toStringAsFixed(1)}h", t.sleepLabel),
               ],
             ),
         ],
@@ -50,12 +52,12 @@ class DailyLogPreview extends StatelessWidget {
     );
   }
 
-  Widget _empty(AppLocalizations t) {
+  Widget _empty(BuildContext context, AppLocalizations t) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF7FA),
+        color: context.colors.background,
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
       child: Row(
@@ -76,13 +78,14 @@ class DailyLogPreview extends StatelessWidget {
     );
   }
 
-  Widget _metric(String value, String label) {
+  Widget _metric(BuildContext context, String value, String label) {
+    final colors = context.colors;
     return Expanded(
       child: Container(
         margin: const EdgeInsets.only(right: 10),
         padding: const EdgeInsets.symmetric(vertical: 18),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFF7FA),
+          color: colors.background,
           borderRadius: BorderRadius.circular(AppRadius.lg),
         ),
         child: Column(
@@ -97,8 +100,8 @@ class DailyLogPreview extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               label,
-              style: const TextStyle(
-                color: Colors.grey,
+              style: TextStyle(
+                color: colors.textSecondary,
                 fontWeight: FontWeight.w600,
               ),
             ),

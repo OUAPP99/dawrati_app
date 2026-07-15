@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../l10n/app_localizations.dart';
 
 class NotesCard extends StatelessWidget {
@@ -13,11 +14,12 @@ class NotesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
@@ -41,7 +43,7 @@ class NotesCard extends StatelessWidget {
             decoration: InputDecoration(
               hintText: t.notesHint,
               filled: true,
-              fillColor: const Color(0xFFFFF7FA),
+              fillColor: colors.background,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(22),
                 borderSide: BorderSide.none,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/widgets/fade_slide.dart';
 import '../../l10n/app_localizations.dart';
 import 'provider/daily_log_provider.dart';
@@ -85,7 +86,7 @@ class _DailyLogScreenState extends State<DailyLogScreen> {
     final t = AppLocalizations.of(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: context.colors.background,
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 18, 22, 120),
@@ -270,11 +271,12 @@ const SizedBox(height: 30),
 
   Widget _dateSelector(BuildContext context, AppLocalizations t) {
     final locale = Localizations.localeOf(context).toString();
+    final colors = context.colors;
 
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
@@ -295,7 +297,7 @@ const SizedBox(height: 30),
               children: [
                 Text(
                   t.selectedDateLabel,
-                  style: const TextStyle(color: Colors.grey),
+                  style: TextStyle(color: colors.textSecondary),
                 ),
                 const SizedBox(height: 4),
                 Text(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../l10n/app_localizations.dart';
 
 class MedicationCard extends StatefulWidget {
@@ -40,11 +41,12 @@ class _MedicationCardState extends State<MedicationCard> {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
@@ -68,7 +70,7 @@ class _MedicationCardState extends State<MedicationCard> {
                   decoration: InputDecoration(
                     hintText: t.addMedicationHint,
                     filled: true,
-                    fillColor: const Color(0xFFFFF7FA),
+                    fillColor: colors.background,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                       borderSide: BorderSide.none,
@@ -86,7 +88,7 @@ class _MedicationCardState extends State<MedicationCard> {
           ),
           const SizedBox(height: 14),
           if (widget.medications.isEmpty)
-            Text(t.noMedicationsAdded, style: const TextStyle(color: Colors.grey))
+            Text(t.noMedicationsAdded, style: TextStyle(color: colors.textSecondary))
           else
             Wrap(
               spacing: 8,

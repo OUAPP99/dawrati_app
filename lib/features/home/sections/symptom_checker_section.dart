@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../l10n/app_localizations.dart';
@@ -18,11 +19,12 @@ class SymptomCheckerSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(AppRadius.card),
         boxShadow: AppShadows.soft,
       ),
@@ -32,15 +34,18 @@ class SymptomCheckerSection extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: Text(t.symptomCheckerTitle, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900)),
+                child: Text(
+                  t.symptomCheckerTitle,
+                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: colors.textPrimary),
+                ),
               ),
               InkWell(
                 onTap: () => _openChecker(context),
                 child: Row(
                   children: [
-                    Text(t.seeAll, style: const TextStyle(fontSize: 17, color: Colors.grey, fontWeight: FontWeight.w700)),
+                    Text(t.seeAll, style: TextStyle(fontSize: 17, color: colors.textSecondary, fontWeight: FontWeight.w700)),
                     const SizedBox(width: 4),
-                    const Icon(Icons.chevron_right, color: Colors.grey),
+                    Icon(Icons.chevron_right, color: colors.textSecondary),
                   ],
                 ),
               ),
@@ -65,7 +70,7 @@ class SymptomCheckerSection extends StatelessWidget {
               Expanded(
                 child: Text(
                   t.symptomTrackText,
-                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800, height: 1.25),
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800, height: 1.25, color: colors.textPrimary),
                 ),
               ),
             ],
@@ -73,13 +78,13 @@ class SymptomCheckerSection extends StatelessWidget {
           const SizedBox(height: 20),
           Text(
             t.symptomHelpText,
-            style: TextStyle(fontSize: 17, color: Colors.grey.shade700, height: 1.35),
+            style: TextStyle(fontSize: 17, color: colors.textSecondary, height: 1.35),
           ),
           const SizedBox(height: 24),
           Container(
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-              color: const Color(0xFFFFF6E6),
+              color: colors.surfaceAlt,
               borderRadius: BorderRadius.circular(AppRadius.lg),
             ),
             child: Column(
@@ -93,11 +98,14 @@ class SymptomCheckerSection extends StatelessWidget {
                     ),
                     const SizedBox(width: 14),
                     Expanded(
-                      child: Text(t.quickSelfCheck, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
+                      child: Text(
+                        t.quickSelfCheck,
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: colors.textPrimary),
+                      ),
                     ),
-                    const Icon(Icons.timer_outlined, color: Colors.grey),
+                    Icon(Icons.timer_outlined, color: colors.textSecondary),
                     const SizedBox(width: 4),
-                    Text(t.minutesReadLabel(5), style: const TextStyle(color: Colors.grey)),
+                    Text(t.minutesReadLabel(5), style: TextStyle(color: colors.textSecondary)),
                   ],
                 ),
                 const SizedBox(height: 18),
@@ -115,7 +123,7 @@ class SymptomCheckerSection extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             t.notDiagnosisTool,
-            style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
+            style: TextStyle(color: colors.textSecondary, fontSize: 13),
           ),
         ],
       ),

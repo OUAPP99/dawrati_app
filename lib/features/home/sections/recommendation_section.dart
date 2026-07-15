@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../core/widgets/animated_tap.dart';
@@ -100,9 +101,10 @@ class RecommendationSection extends StatelessWidget {
       children: [
         Text(
           t.recommendedForYou,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.w900,
+            color: context.colors.textPrimary,
           ),
         ),
 
@@ -178,6 +180,7 @@ class RecommendationSection extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 21,
                       fontWeight: FontWeight.bold,
+                      color: Color(0xFF1F2937),
                     ),
                   ),
 
@@ -187,6 +190,7 @@ class RecommendationSection extends StatelessWidget {
                     text,
                     style: const TextStyle(
                       height: 1.4,
+                      color: Color(0xFF1F2937),
                     ),
                   ),
                 ],

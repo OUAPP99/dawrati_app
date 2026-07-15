@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../log/models/daily_log_entry.dart';
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../l10n/app_localizations.dart';
@@ -27,6 +28,7 @@ class BottomSheetDay extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).toString();
+    final colors = context.colors;
 
     return DraggableScrollableSheet(
       initialChildSize: .82,
@@ -35,7 +37,7 @@ class BottomSheetDay extends StatelessWidget {
       builder: (_, controller) {
         return Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: colors.surface,
             borderRadius: BorderRadius.vertical(
               top: Radius.circular(AppRadius.hero),
             ),
@@ -50,7 +52,7 @@ class BottomSheetDay extends StatelessWidget {
                   width: 55,
                   height: 6,
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
+                    color: colors.divider,
                     borderRadius: BorderRadius.circular(50),
                   ),
                 ),
@@ -92,8 +94,8 @@ class BottomSheetDay extends StatelessWidget {
 
               Text(
                 DateFormat.yMd(locale).format(date),
-                style: const TextStyle(
-                  color: Colors.grey,
+                style: TextStyle(
+                  color: colors.textSecondary,
                   fontSize: 16,
                 ),
               ),
@@ -166,7 +168,7 @@ class BottomSheetDay extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFF7FA),
+                    color: colors.background,
                     borderRadius:
                         BorderRadius.circular(AppRadius.card),
                   ),
@@ -222,7 +224,7 @@ class BottomSheetDay extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(22),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFF7FA),
+                    color: colors.background,
                     borderRadius:
                         BorderRadius.circular(AppRadius.card),
                     boxShadow: AppShadows.soft,
@@ -265,10 +267,11 @@ class _InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF7FA),
+        color: colors.background,
         borderRadius: BorderRadius.circular(AppRadius.card),
         boxShadow: AppShadows.soft,
       ),
@@ -277,7 +280,7 @@ class _InfoCard extends StatelessWidget {
 
           CircleAvatar(
             radius: 24,
-            backgroundColor: Colors.white,
+            backgroundColor: colors.surface,
             child: Icon(icon, color: Colors.pink),
           ),
 
@@ -291,8 +294,8 @@ class _InfoCard extends StatelessWidget {
 
                 Text(
                   title,
-                  style: const TextStyle(
-                    color: Colors.grey,
+                  style: TextStyle(
+                    color: colors.textSecondary,
                   ),
                 ),
 

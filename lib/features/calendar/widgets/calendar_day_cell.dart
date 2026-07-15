@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
+
 class CalendarDayCell extends StatelessWidget {
   final int day;
   final String heroTag;
@@ -33,7 +35,7 @@ class CalendarDayCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color bg = Colors.transparent;
-    Color text = Colors.black87;
+    Color text = context.colors.textPrimary;
 
     if (isPeriod) {
       bg = const Color(0xFFFFB6CF);

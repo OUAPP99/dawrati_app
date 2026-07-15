@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
+
 class WeekHeader extends StatelessWidget {
   const WeekHeader({super.key});
 
@@ -18,7 +20,7 @@ class WeekHeader extends StatelessWidget {
             child: Text(
               day,
               style: TextStyle(
-                color: Colors.grey.shade500,
+                color: context.colors.textSecondary,
                 fontWeight: FontWeight.w700,
               ),
             ),

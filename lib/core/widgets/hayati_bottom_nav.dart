@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
+import '../theme/app_color_scheme.dart';
 import '../theme/app_radius.dart';
 import '../theme/app_shadows.dart';
 
@@ -41,7 +42,7 @@ class HayatiBottomNav extends StatelessWidget {
           height: 68,
           padding: const EdgeInsets.symmetric(horizontal: 6),
           decoration: BoxDecoration(
-            color: AppColors.surface,
+            color: context.colors.surface,
             borderRadius: BorderRadius.circular(AppRadius.xl),
             boxShadow: AppShadows.medium,
           ),
@@ -120,7 +121,7 @@ class _NavTapTarget extends StatelessWidget {
               curve: Curves.easeOut,
               child: Icon(
                 selected ? item.activeIcon : item.icon,
-                color: selected ? AppColors.primary : AppColors.textSecondary,
+                color: selected ? AppColors.primary : context.colors.textSecondary,
                 size: 24,
               ),
             ),

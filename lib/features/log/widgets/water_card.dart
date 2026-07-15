@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../l10n/app_localizations.dart';
 
 class WaterCard extends StatelessWidget {
@@ -17,6 +18,7 @@ class WaterCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _card(
+      context,
       title: AppLocalizations.of(context).waterLabel,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -29,7 +31,7 @@ class WaterCard extends StatelessWidget {
             width: 130,
             padding: const EdgeInsets.symmetric(vertical: 16),
             decoration: BoxDecoration(
-              color: const Color(0xFFFFF7FA),
+              color: context.colors.background,
               borderRadius: BorderRadius.circular(22),
             ),
             child: Text(
@@ -47,11 +49,11 @@ class WaterCard extends StatelessWidget {
     );
   }
 
-  Widget _card({required String title, required Widget child}) {
+  Widget _card(BuildContext context, {required String title, required Widget child}) {
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(

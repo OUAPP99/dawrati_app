@@ -25,6 +25,7 @@ import 'features/partner/partner_mode_provider.dart';
 import 'features/security/app_lock_overlay.dart';
 import 'features/security/app_lock_provider.dart';
 import 'features/subscription/subscription_provider.dart';
+import 'features/app_state/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -91,6 +92,10 @@ void main() async {
         ChangeNotifierProvider(
           create: (_) => AppLockProvider(),
         ),
+
+        ChangeNotifierProvider(
+          create: (_) => ThemeProvider(),
+        ),
       ],
       child: const CycleApp(),
     ),
@@ -104,6 +109,7 @@ class CycleApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final cycleProvider = context.watch<CycleProvider>();
     final appState = context.watch<AppStateProvider>();
+    final themeProvider = context.watch<ThemeProvider>();
 
     return SyncGate(
       child: PartnerViewSync(
@@ -111,6 +117,8 @@ class CycleApp extends StatelessWidget {
           title: 'دورتي',
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: themeProvider.themeMode,
           locale: Locale(appState.languageCode),
           supportedLocales: AppLocalizations.supportedLocales,
           localizationsDelegates: AppLocalizations.localizationsDelegates,

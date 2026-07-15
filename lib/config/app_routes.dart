@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../screens/splash/splash_screen.dart';
 import '../screens/language/language_screen.dart';
+import '../screens/theme/theme_screen.dart';
 import '../screens/onboarding/onboarding_screen.dart';
 import '../screens/auth/login_screen.dart';
 import '../screens/questionnaire/questionnaire_screen.dart';
@@ -18,6 +19,7 @@ import '../features/security/app_lock_settings_screen.dart';
 class AppRoutes {
   static const String splash = '/splash';
   static const String language = '/language';
+  static const String theme = '/theme';
   static const String onboarding = '/onboarding';
   static const String login = '/login';
   static const String questionnaire = '/questionnaire';
@@ -41,6 +43,7 @@ class AppRoutes {
     return {
       splash: (context) => const SplashScreen(),
       language: (context) => const LanguageScreen(),
+      theme: (context) => const ThemeScreen(),
       onboarding: (context) => const OnboardingScreen(),
       login: (context) => const LoginScreen(),
       questionnaire: (context) => const QuestionnaireScreen(),

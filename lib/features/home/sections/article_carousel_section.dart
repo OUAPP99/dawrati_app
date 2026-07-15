@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../core/widgets/animated_tap.dart';
@@ -50,16 +51,16 @@ class ArticleCarouselSection extends StatelessWidget {
             Expanded(
               child: Text(
                 heading,
-                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900),
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: context.colors.textPrimary),
               ),
             ),
             InkWell(
               onTap: () => _openAll(context),
               child: Row(
                 children: [
-                  Text(t.seeAll, style: const TextStyle(fontSize: 17, color: Colors.grey, fontWeight: FontWeight.w700)),
+                  Text(t.seeAll, style: TextStyle(fontSize: 17, color: context.colors.textSecondary, fontWeight: FontWeight.w700)),
                   const SizedBox(width: 4),
-                  const Icon(Icons.chevron_right, color: Colors.grey),
+                  Icon(Icons.chevron_right, color: context.colors.textSecondary),
                 ],
               ),
             ),
@@ -133,6 +134,7 @@ class _Card extends StatelessWidget {
                       fontSize: 19,
                       fontWeight: FontWeight.w900,
                       height: 1.05,
+                      color: Color(0xFF1F2937),
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -141,6 +143,7 @@ class _Card extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
+                      color: Color(0xFF1F2937),
                     ),
                   ),
                 ],

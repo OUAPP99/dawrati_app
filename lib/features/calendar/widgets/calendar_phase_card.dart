@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../l10n/label_translations.dart';
 
@@ -18,6 +19,7 @@ class CalendarPhaseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return InkWell(
       borderRadius: BorderRadius.circular(30),
@@ -25,7 +27,7 @@ class CalendarPhaseCard extends StatelessWidget {
       child: Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
@@ -57,8 +59,8 @@ class CalendarPhaseCard extends StatelessWidget {
                 const SizedBox(height: 6),
                 Text(
                   translatePhase(t, phase),
-                  style: const TextStyle(
-                    color: Colors.grey,
+                  style: TextStyle(
+                    color: colors.textSecondary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

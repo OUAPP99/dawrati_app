@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../l10n/app_localizations.dart';
@@ -32,6 +33,7 @@ class FertilityCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return InkWell(
       borderRadius: BorderRadius.circular(AppRadius.card),
@@ -39,7 +41,7 @@ class FertilityCard extends StatelessWidget {
       child: Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFEAF2),
+        color: colors.surfaceAlt,
         borderRadius: BorderRadius.circular(AppRadius.card),
         boxShadow: AppShadows.soft,
       ),
@@ -47,7 +49,7 @@ class FertilityCard extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 32,
-            backgroundColor: Colors.white,
+            backgroundColor: colors.surface,
             child: Icon(
               Icons.favorite,
               color: accentColor,
@@ -61,9 +63,9 @@ class FertilityCard extends StatelessWidget {
               children: [
                 Text(
                   t.chanceOfPregnancy,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 15,
-                    color: Colors.grey,
+                    color: colors.textSecondary,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -79,17 +81,17 @@ class FertilityCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   description(t),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 15,
                     height: 1.35,
-                    color: Colors.black54,
+                    color: colors.textSecondary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
             ),
           ),
-          const Icon(Icons.chevron_right, color: Colors.grey),
+          Icon(Icons.chevron_right, color: colors.textSecondary),
         ],
       ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/widgets/fade_slide.dart';
 import '../../l10n/app_localizations.dart';
@@ -122,16 +123,17 @@ class HomeScreen extends StatelessWidget {
     final t = AppLocalizations.of(context);
     final isPremium = context.watch<SubscriptionProvider>().isPremium;
     final cycle = context.watch<CycleProvider>();
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: colors.background,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 90),
         child: FloatingActionButton(
           heroTag: 'quickChatFab',
           onPressed: () => _openQuickChat(context),
-          backgroundColor: Colors.white,
+          backgroundColor: colors.surface,
           elevation: 4,
           child: const CircleAvatar(
             radius: 22,
@@ -194,9 +196,7 @@ class HomeScreen extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFFEDE7FF), Color(0xFFFFEAF3)],
-                    ),
+                    color: colors.surfaceAlt,
                     borderRadius: BorderRadius.circular(AppRadius.card),
                     border: Border.all(color: const Color(0xFF7C4DFF).withValues(alpha: .25)),
                   ),
@@ -204,8 +204,8 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       Container(
                         padding: const EdgeInsets.all(10),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
+                        decoration: BoxDecoration(
+                          color: colors.surface,
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(Icons.favorite_border, color: Color(0xFF7C4DFF)),
@@ -217,12 +217,12 @@ class HomeScreen extends StatelessWidget {
                           children: [
                             Text(
                               t.settingsPartner,
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: colors.textPrimary),
                             ),
                             const SizedBox(height: 2),
                             Text(
                               t.settingsPartnerDesc,
-                              style: TextStyle(fontSize: 12, color: Colors.grey.shade700),
+                              style: TextStyle(fontSize: 12, color: colors.textSecondary),
                             ),
                           ],
                         ),
@@ -258,7 +258,7 @@ class HomeScreen extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFEAF3),
+                    color: colors.surfaceAlt,
                     borderRadius: BorderRadius.circular(AppRadius.card),
                   ),
                   child: Row(
@@ -268,7 +268,7 @@ class HomeScreen extends StatelessWidget {
                       Expanded(
                         child: Text(
                           t.browseAllArticles,
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: colors.textPrimary),
                         ),
                       ),
                       const Icon(Icons.chevron_right, color: Color(0xFFE91E63)),

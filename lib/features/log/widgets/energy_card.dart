@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../l10n/app_localizations.dart';
 
 class EnergyCard extends StatelessWidget {
@@ -15,6 +16,7 @@ class EnergyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _card(
+      context,
       title: AppLocalizations.of(context).energyTitle,
       child: Column(
         children: [
@@ -35,11 +37,11 @@ class EnergyCard extends StatelessWidget {
     );
   }
 
-  Widget _card({required String title, required Widget child}) {
+  Widget _card(BuildContext context, {required String title, required Widget child}) {
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(

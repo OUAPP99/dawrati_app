@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../l10n/app_localizations.dart';
 
 class HomeActionsSection extends StatelessWidget {
@@ -17,10 +18,12 @@ class HomeActionsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return Row(
       children: [
         _action(
+          context,
           icon: Icons.water_drop,
           label: t.homeLogPeriod,
           color: const Color(0xFFE91E63),
@@ -29,29 +32,33 @@ class HomeActionsSection extends StatelessWidget {
         ),
         const SizedBox(width: 18),
         _action(
+          context,
           icon: Icons.add,
           label: t.homeSymptoms,
-          color: Colors.black87,
+          color: colors.textPrimary,
           onTap: onSymptoms,
         ),
         const SizedBox(width: 18),
         _action(
+          context,
           icon: Icons.favorite_border,
           label: t.homeSex,
-          color: Colors.black87,
+          color: colors.textPrimary,
           onTap: onSex,
         ),
       ],
     );
   }
 
-  Widget _action({
+  Widget _action(
+    BuildContext context, {
     required IconData icon,
     required String label,
     required Color color,
     bool filled = false,
     VoidCallback? onTap,
   }) {
+    final colors = context.colors;
     return Expanded(
       child: InkWell(
         borderRadius: BorderRadius.circular(40),
@@ -62,7 +69,7 @@ class HomeActionsSection extends StatelessWidget {
               width: 74,
               height: 74,
               decoration: BoxDecoration(
-                color: filled ? color : Colors.white,
+                color: filled ? color : colors.surface,
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
@@ -82,9 +89,10 @@ class HomeActionsSection extends StatelessWidget {
             Text(
               label,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w700,
+                color: colors.textPrimary,
               ),
             ),
           ],

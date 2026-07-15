@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../l10n/app_localizations.dart';
 
 class MoodSelector extends StatelessWidget {
@@ -40,6 +41,7 @@ class MoodSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,12 +70,12 @@ class MoodSelector extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: selected
                       ? const Color(0xFFFFEAF3)
-                      : Colors.white,
+                      : colors.surface,
                   borderRadius: BorderRadius.circular(22),
                   border: Border.all(
                     color: selected
                         ? const Color(0xFFE91E63)
-                        : Colors.grey.shade200,
+                        : colors.divider,
                     width: 2,
                   ),
                   boxShadow: selected
@@ -101,7 +103,7 @@ class MoodSelector extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                         color: selected
                             ? const Color(0xFFE91E63)
-                            : Colors.grey,
+                            : colors.textSecondary,
                       ),
                     ),
                   ],

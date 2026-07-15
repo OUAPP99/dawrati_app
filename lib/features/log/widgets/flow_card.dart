@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../l10n/app_localizations.dart';
 
 class FlowCard extends StatelessWidget {
@@ -37,8 +38,10 @@ class FlowCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return _card(
+      context,
       title: t.periodFlowTitle,
       child: Row(
         children: flows.map((flow) {
@@ -52,7 +55,7 @@ class FlowCard extends StatelessWidget {
                 margin: const EdgeInsets.only(right: 8),
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 decoration: BoxDecoration(
-                  color: selected ? const Color(0xFFFFEAF3) : const Color(0xFFFFF7FA),
+                  color: selected ? const Color(0xFFFFEAF3) : colors.background,
                   borderRadius: BorderRadius.circular(18),
                   border: Border.all(
                     color: selected ? const Color(0xFFE91E63) : Colors.transparent,
@@ -74,11 +77,11 @@ class FlowCard extends StatelessWidget {
     );
   }
 
-  Widget _card({required String title, required Widget child}) {
+  Widget _card(BuildContext context, {required String title, required Widget child}) {
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(

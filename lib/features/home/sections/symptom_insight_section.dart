@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../l10n/app_localizations.dart';
@@ -59,11 +60,12 @@ class SymptomInsightSection extends StatelessWidget {
 
     final symptomLabel = SymptomsSelector.label(t, bestSymptom!);
     final phaseLabel = translatePhase(t, bestPhase!);
+    final colors = context.colors;
 
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(AppRadius.card),
         boxShadow: AppShadows.soft,
       ),
@@ -81,12 +83,12 @@ class SymptomInsightSection extends StatelessWidget {
               children: [
                 Text(
                   t.symptomInsightTitle,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: colors.textPrimary),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   t.symptomInsightText(symptomLabel, phaseLabel),
-                  style: TextStyle(color: Colors.grey.shade700, height: 1.4),
+                  style: TextStyle(color: colors.textSecondary, height: 1.4),
                 ),
               ],
             ),
@@ -97,12 +99,13 @@ class SymptomInsightSection extends StatelessWidget {
   }
 
   Widget _lockedTeaser(BuildContext context, AppLocalizations t) {
+    final colors = context.colors;
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, '/premium'),
       child: Container(
         padding: const EdgeInsets.all(22),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(AppRadius.card),
           boxShadow: AppShadows.soft,
         ),
@@ -120,12 +123,12 @@ class SymptomInsightSection extends StatelessWidget {
                 children: [
                   Text(
                     t.symptomInsightTitle,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: colors.textPrimary),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     t.symptomInsightLockedText,
-                    style: TextStyle(color: Colors.grey.shade700, height: 1.4),
+                    style: TextStyle(color: colors.textSecondary, height: 1.4),
                   ),
                 ],
               ),

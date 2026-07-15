@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../l10n/app_localizations.dart';
 
 class SymptomsSelector extends StatelessWidget {
@@ -49,8 +50,10 @@ class SymptomsSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return _section(
+      context,
       title: t.homeSymptoms,
       child: Wrap(
         spacing: 10,
@@ -67,13 +70,13 @@ class SymptomsSelector extends StatelessWidget {
               color: selected ? Colors.white : const Color(0xFFE91E63),
             ),
             selectedColor: const Color(0xFFE91E63),
-            backgroundColor: Colors.white,
+            backgroundColor: colors.surface,
             labelStyle: TextStyle(
-              color: selected ? Colors.white : Colors.black87,
+              color: selected ? Colors.white : colors.textPrimary,
               fontWeight: FontWeight.w700,
             ),
             side: BorderSide(
-              color: selected ? const Color(0xFFE91E63) : Colors.grey.shade200,
+              color: selected ? const Color(0xFFE91E63) : colors.divider,
             ),
             onSelected: (_) => onToggle(item.$1),
           );
@@ -82,15 +85,17 @@ class SymptomsSelector extends StatelessWidget {
     );
   }
 
-  Widget _section({
+  Widget _section(
+    BuildContext context, {
     required String title,
     required Widget child,
   }) {
+    final colors = context.colors;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
@@ -103,7 +108,10 @@ class SymptomsSelector extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),
+          Text(
+            title,
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: colors.textPrimary),
+          ),
           const SizedBox(height: 18),
           child,
         ],

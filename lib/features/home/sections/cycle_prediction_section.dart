@@ -56,6 +56,7 @@ class CyclePredictionSection extends StatelessWidget {
             style: const TextStyle(
               fontSize: 25,
               fontWeight: FontWeight.w800,
+              color: Color(0xFF1F2937),
             ),
           ),
           const SizedBox(height: 12),
@@ -65,6 +66,7 @@ class CyclePredictionSection extends StatelessWidget {
               fontSize: 68,
               fontWeight: FontWeight.w900,
               height: 1,
+              color: Color(0xFF1F2937),
             ),
           ),
           const SizedBox(height: 22),
@@ -83,6 +85,7 @@ class CyclePredictionSection extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
+                color: Color(0xFF1F2937),
               ),
             ),
           ),

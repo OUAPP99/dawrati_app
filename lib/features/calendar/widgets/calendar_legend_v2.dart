@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../l10n/app_localizations.dart';
 
 class CalendarLegendV2 extends StatelessWidget {
@@ -48,8 +49,8 @@ class _Item extends StatelessWidget {
         const SizedBox(width: 6),
         Text(
           text,
-          style: const TextStyle(
-            color: Colors.black54,
+          style: TextStyle(
+            color: context.colors.textSecondary,
             fontWeight: FontWeight.w600,
           ),
         ),

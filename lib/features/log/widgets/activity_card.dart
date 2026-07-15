@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../l10n/app_localizations.dart';
 
 class ActivityCard extends StatelessWidget {
@@ -40,8 +41,10 @@ class ActivityCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return _card(
+      context,
       title: t.activityLabel,
       child: Wrap(
         spacing: 10,
@@ -58,13 +61,13 @@ class ActivityCard extends StatelessWidget {
               color: selected ? Colors.white : const Color(0xFFE91E63),
             ),
             selectedColor: const Color(0xFFE91E63),
-            backgroundColor: Colors.white,
+            backgroundColor: colors.surface,
             labelStyle: TextStyle(
-              color: selected ? Colors.white : Colors.black87,
+              color: selected ? Colors.white : colors.textPrimary,
               fontWeight: FontWeight.w700,
             ),
             side: BorderSide(
-              color: selected ? const Color(0xFFE91E63) : Colors.grey.shade200,
+              color: selected ? const Color(0xFFE91E63) : colors.divider,
             ),
             onSelected: (_) => onChanged(item.$1),
           );
@@ -73,11 +76,11 @@ class ActivityCard extends StatelessWidget {
     );
   }
 
-  Widget _card({required String title, required Widget child}) {
+  Widget _card(BuildContext context, {required String title, required Widget child}) {
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(

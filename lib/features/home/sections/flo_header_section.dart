@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../subscription/subscription_provider.dart';
 
 class FloHeaderSection extends StatelessWidget {
@@ -19,7 +20,7 @@ class FloHeaderSection extends StatelessWidget {
 
     return Row(
       children: [
-        _circleButton(Icons.person_outline, onProfileTap, isPremium: isPremium),
+        _circleButton(context, Icons.person_outline, onProfileTap, isPremium: isPremium),
         const Spacer(),
         Image.asset(
           "assets/images/logo_header.png",
@@ -27,17 +28,18 @@ class FloHeaderSection extends StatelessWidget {
           fit: BoxFit.contain,
         ),
         const Spacer(),
-        _circleButton(Icons.calendar_month_outlined, onCalendarTap),
+        _circleButton(context, Icons.calendar_month_outlined, onCalendarTap),
       ],
     );
   }
 
-  Widget _circleButton(IconData icon, VoidCallback? onTap, {bool isPremium = false}) {
+  Widget _circleButton(BuildContext context, IconData icon, VoidCallback? onTap, {bool isPremium = false}) {
+    final colors = context.colors;
     final button = Container(
       width: 56,
       height: 56,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         shape: BoxShape.circle,
         border: isPremium ? Border.all(color: const Color(0xFFFFC857), width: 2.5) : null,
         boxShadow: [
@@ -50,7 +52,7 @@ class FloHeaderSection extends StatelessWidget {
       ),
       child: Icon(
         icon,
-        color: const Color(0xFF5A4B56),
+        color: colors.textPrimary,
         size: 28,
       ),
     );

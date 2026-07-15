@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../l10n/app_localizations.dart';
@@ -33,11 +34,12 @@ class CalendarHeroHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final locale = Localizations.localeOf(context).toString();
+    final colors = context.colors;
 
     return Container(
       padding: const EdgeInsets.all(26),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(AppRadius.hero),
         boxShadow: AppShadows.soft,
       ),
@@ -58,9 +60,10 @@ class CalendarHeroHeader extends StatelessWidget {
 
                     Text(
                       DateFormat.yMMMM(locale).format(currentMonth),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 34,
                         fontWeight: FontWeight.w900,
+                        color: colors.textPrimary,
                       ),
                     ),
 
@@ -68,8 +71,8 @@ class CalendarHeroHeader extends StatelessWidget {
 
                     Text(
                       t.goodMorning,
-                      style: const TextStyle(
-                        color: Colors.grey,
+                      style: TextStyle(
+                        color: colors.textSecondary,
                         fontSize: 16,
                       ),
                     ),
@@ -113,9 +116,10 @@ class CalendarHeroHeader extends StatelessWidget {
 
                     Text(
                       t.cycleDayLabel(cycleDay),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.w900,
+                        color: colors.textPrimary,
                       ),
                     ),
 
@@ -123,9 +127,9 @@ class CalendarHeroHeader extends StatelessWidget {
 
                     Text(
                       translatePhase(t, phase),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 18,
-                        color: Colors.grey,
+                        color: colors.textSecondary,
                       ),
                     ),
 
@@ -147,8 +151,9 @@ class CalendarHeroHeader extends StatelessWidget {
 
                         Text(
                           fertility(t),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.w700,
+                            color: colors.textPrimary,
                           ),
                         ),
 

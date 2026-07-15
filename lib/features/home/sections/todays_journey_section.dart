@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../l10n/app_localizations.dart';
@@ -7,7 +8,7 @@ import '../../../l10n/app_localizations.dart';
 class TodaysJourneySection extends StatelessWidget {
   const TodaysJourneySection({super.key});
 
-  Widget tile(IconData icon, String title) {
+  Widget tile(BuildContext context, IconData icon, String title) {
     return Expanded(
       child: Column(
         children: [
@@ -23,8 +24,9 @@ class TodaysJourneySection extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.w700,
+              color: context.colors.textPrimary,
             ),
           ),
         ],
@@ -35,11 +37,12 @@ class TodaysJourneySection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(AppRadius.card),
         boxShadow: AppShadows.soft,
       ),
@@ -48,9 +51,10 @@ class TodaysJourneySection extends StatelessWidget {
         children: [
           Text(
             t.todaysJourney,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.w900,
+              color: colors.textPrimary,
             ),
           ),
 
@@ -58,10 +62,10 @@ class TodaysJourneySection extends StatelessWidget {
 
           Row(
             children: [
-              tile(Icons.mood, t.moodLabel),
-              tile(Icons.water_drop, t.waterLabel),
-              tile(Icons.nightlight_round, t.sleepLabel),
-              tile(Icons.directions_walk, t.activityLabel),
+              tile(context, Icons.mood, t.moodLabel),
+              tile(context, Icons.water_drop, t.waterLabel),
+              tile(context, Icons.nightlight_round, t.sleepLabel),
+              tile(context, Icons.directions_walk, t.activityLabel),
             ],
           ),
 

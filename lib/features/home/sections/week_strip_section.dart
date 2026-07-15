@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
+
 class WeekStripSection extends StatelessWidget {
   const WeekStripSection({super.key});
 
@@ -8,14 +10,16 @@ class WeekStripSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final now = DateTime.now();
     final locale = Localizations.localeOf(context).toString();
+    final colors = context.colors;
 
     return Column(
       children: [
         Text(
           DateFormat.MMMMd(locale).format(now),
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w800,
+            color: colors.textPrimary,
           ),
         ),
         const SizedBox(height: 22),
@@ -36,7 +40,7 @@ class WeekStripSection extends StatelessWidget {
                       Text(
                         DateFormat.EEEEE(locale).format(date),
                         style: TextStyle(
-                          color: Colors.grey.shade500,
+                          color: colors.textSecondary,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -55,7 +59,7 @@ class WeekStripSection extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w900,
-                              color: isToday ? Colors.white : Colors.black,
+                              color: isToday ? Colors.white : colors.textPrimary,
                             ),
                           ),
                         ),

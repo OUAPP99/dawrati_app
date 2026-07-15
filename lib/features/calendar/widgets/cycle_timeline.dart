@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_shadows.dart';
 import '../../../l10n/app_localizations.dart';
@@ -17,11 +18,12 @@ class CycleTimeline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(AppRadius.card),
         boxShadow: AppShadows.soft,
       ),
@@ -44,7 +46,7 @@ class CycleTimeline extends StatelessWidget {
               Container(
                 height: 14,
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
+                  color: colors.divider,
                   borderRadius: BorderRadius.circular(50),
                 ),
               ),
@@ -103,7 +105,7 @@ class CycleTimeline extends StatelessWidget {
                   width: 24,
                   height: 24,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: colors.surface,
                     shape: BoxShape.circle,
                     border: Border.all(
                       color: const Color(0xFFE91E63),
@@ -159,9 +161,9 @@ class _Legend extends StatelessWidget {
         const SizedBox(width: 6),
         Text(
           text,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 13,
-            color: Colors.black54,
+            color: context.colors.textSecondary,
             fontWeight: FontWeight.w600,
           ),
         ),
