@@ -2,6 +2,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/theme/app_color_scheme.dart';
+
 /// Interactive line chart for a daily metric (water, sleep, mood...).
 /// Shows real dates on the x-axis and a tooltip with the exact value on tap.
 class TrendChart extends StatelessWidget {
@@ -28,6 +30,8 @@ class TrendChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
+
     if (dates.isEmpty) {
       return SizedBox(
         height: 180,
@@ -35,7 +39,7 @@ class TrendChart extends StatelessWidget {
           child: Text(
             noDataLabel,
             textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.grey),
+            style: TextStyle(color: colors.textSecondary),
           ),
         ),
       );
@@ -59,7 +63,7 @@ class TrendChart extends StatelessWidget {
             drawVerticalLine: false,
             horizontalInterval: (maxY - minY) / 4 == 0 ? 1 : (maxY - minY) / 4,
             getDrawingHorizontalLine: (_) => FlLine(
-              color: Colors.grey.shade200,
+              color: colors.divider,
               strokeWidth: 1,
             ),
           ),
@@ -74,7 +78,7 @@ class TrendChart extends StatelessWidget {
                 interval: (maxY - minY) / 4 == 0 ? 1 : (maxY - minY) / 4,
                 getTitlesWidget: (value, meta) => Text(
                   leftAxisLabel != null ? leftAxisLabel!(value) : value.toStringAsFixed(0),
-                  style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
+                  style: TextStyle(fontSize: 11, color: colors.textSecondary),
                 ),
               ),
             ),
@@ -91,7 +95,7 @@ class TrendChart extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 6),
                     child: Text(
                       DateFormat.Md(locale).format(dates[index]),
-                      style: TextStyle(fontSize: 10, color: Colors.grey.shade500),
+                      style: TextStyle(fontSize: 10, color: colors.textSecondary),
                     ),
                   );
                 },
@@ -122,7 +126,7 @@ class TrendChart extends StatelessWidget {
               dotData: FlDotData(
                 show: values.length <= 14,
                 getDotPainter: (spot, percent, bar, index) =>
-                    FlDotCirclePainter(radius: 3.5, color: color, strokeWidth: 2, strokeColor: Colors.white),
+                    FlDotCirclePainter(radius: 3.5, color: color, strokeWidth: 2, strokeColor: colors.surface),
               ),
               belowBarData: BarAreaData(
                 show: true,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/trend_chart.dart';
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/widgets/fade_slide.dart';
 import '../../l10n/app_localizations.dart';
 import '../../l10n/label_translations.dart';
@@ -38,7 +39,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
     final moodValues = range.map((e) => moodScore(e.mood).toDouble()).toList();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: context.colors.background,
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 18, 22, 120),
@@ -103,9 +104,9 @@ class _InsightsScreenState extends State<InsightsScreen> {
               delay: 80,
               child: Row(
                 children: [
-                  Expanded(child: _smallCard(t.waterLabel, "${log.water.toStringAsFixed(1)}L", Icons.water_drop, Colors.blue)),
+                  Expanded(child: _smallCard(context, t.waterLabel, "${log.water.toStringAsFixed(1)}L", Icons.water_drop, Colors.blue)),
                   const SizedBox(width: 14),
-                  Expanded(child: _smallCard(t.sleepLabel, "${log.sleep.toStringAsFixed(1)}h", Icons.bedtime, Colors.indigo)),
+                  Expanded(child: _smallCard(context, t.sleepLabel, "${log.sleep.toStringAsFixed(1)}h", Icons.bedtime, Colors.indigo)),
                 ],
               ),
             ),
@@ -115,9 +116,9 @@ class _InsightsScreenState extends State<InsightsScreen> {
               delay: 140,
               child: Row(
                 children: [
-                  Expanded(child: _smallCard(t.moodLabel, translateMoodString(t, log.mood), Icons.mood, Colors.orange)),
+                  Expanded(child: _smallCard(context, t.moodLabel, translateMoodString(t, log.mood), Icons.mood, Colors.orange)),
                   const SizedBox(width: 14),
-                  Expanded(child: _smallCard(t.logsLabel, "${log.history.length}", Icons.edit_note, Colors.green)),
+                  Expanded(child: _smallCard(context, t.logsLabel, "${log.history.length}", Icons.edit_note, Colors.green)),
                 ],
               ),
             ),
@@ -133,6 +134,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
             FadeSlide(
               delay: 240,
               child: _chartCard(
+                context,
                 t.hydrationTitle,
                 TrendChart(
                   dates: dates,
@@ -151,6 +153,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
             FadeSlide(
               delay: 280,
               child: _chartCard(
+                context,
                 t.sleepLabel,
                 TrendChart(
                   dates: dates,
@@ -169,6 +172,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
             FadeSlide(
               delay: 320,
               child: _chartCard(
+                context,
                 t.moodTrendTitle,
                 TrendChart(
                   dates: dates,
@@ -231,7 +235,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: selected ? const Color(0xFFE91E63) : Colors.white,
+          color: selected ? const Color(0xFFE91E63) : context.colors.surface,
           borderRadius: BorderRadius.circular(20),
         ),
         alignment: Alignment.center,
@@ -239,13 +243,13 @@ class _InsightsScreenState extends State<InsightsScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (locked) ...[
-              Icon(Icons.lock, size: 14, color: selected ? Colors.white : Colors.grey.shade500),
+              Icon(Icons.lock, size: 14, color: selected ? Colors.white : context.colors.textSecondary),
               const SizedBox(width: 6),
             ],
             Text(
               label,
               style: TextStyle(
-                color: selected ? Colors.white : Colors.black87,
+                color: selected ? Colors.white : context.colors.textPrimary,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -269,7 +273,10 @@ class _InsightsScreenState extends State<InsightsScreen> {
         children: [
           Text(t.cycleOverview, style: const TextStyle(fontSize: 18, color: Colors.grey, fontWeight: FontWeight.w700)),
           const SizedBox(height: 10),
-          Text(t.dayLabel(cycleDay), style: const TextStyle(fontSize: 46, fontWeight: FontWeight.w900)),
+          Text(
+            t.dayLabel(cycleDay),
+            style: const TextStyle(fontSize: 46, fontWeight: FontWeight.w900, color: Color(0xFF1F2937)),
+          ),
           const SizedBox(height: 6),
           Text(translatePhase(t, phase), style: const TextStyle(fontSize: 22, color: Color(0xFFE91E63), fontWeight: FontWeight.w800)),
         ],
@@ -277,11 +284,12 @@ class _InsightsScreenState extends State<InsightsScreen> {
     );
   }
 
-  Widget _smallCard(String title, String value, IconData icon, Color color) {
+  Widget _smallCard(BuildContext context, String title, String value, IconData icon, Color color) {
+    final colors = context.colors;
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(28),
       ),
       child: Column(
@@ -290,17 +298,17 @@ class _InsightsScreenState extends State<InsightsScreen> {
           const SizedBox(height: 10),
           Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),
           const SizedBox(height: 4),
-          Text(title, style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w700)),
+          Text(title, style: TextStyle(color: colors.textSecondary, fontWeight: FontWeight.w700)),
         ],
       ),
     );
   }
 
-  Widget _chartCard(String title, Widget chart) {
+  Widget _chartCard(BuildContext context, String title, Widget chart) {
     return Container(
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(30),
       ),
       child: Column(
@@ -332,7 +340,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(fontSize: 16, height: 1.45, fontWeight: FontWeight.w600),
+              style: const TextStyle(fontSize: 16, height: 1.45, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)),
             ),
           ),
         ],
