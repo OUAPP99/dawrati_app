@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_shadows.dart';
 import 'article_detail_screen.dart';
@@ -13,8 +14,9 @@ class ArticlesListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.colors;
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: colors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -52,7 +54,7 @@ class ArticlesListScreen extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: colors.surface,
                         borderRadius: BorderRadius.circular(AppRadius.card),
                         boxShadow: AppShadows.soft,
                       ),
@@ -79,12 +81,12 @@ class ArticlesListScreen extends StatelessWidget {
                                 const SizedBox(height: 6),
                                 Text(
                                   article.subtitle,
-                                  style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+                                  style: TextStyle(fontSize: 13, color: colors.textSecondary),
                                 ),
                               ],
                             ),
                           ),
-                          const Icon(Icons.chevron_right, color: Colors.grey),
+                          Icon(Icons.chevron_right, color: colors.textSecondary),
                         ],
                       ),
                     ),

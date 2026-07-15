@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import 'models/article.dart';
 
 class ArticleDetailScreen extends StatelessWidget {
@@ -12,7 +13,7 @@ class ArticleDetailScreen extends StatelessWidget {
     final paragraphs = article.body.split('\n\n');
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: context.colors.background,
       body: SafeArea(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -48,7 +49,7 @@ class ArticleDetailScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     article.subtitle,
-                    style: TextStyle(fontSize: 14, color: Colors.grey.shade600, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 14, color: context.colors.textSecondary, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 24),
                   for (final p in paragraphs) ...[

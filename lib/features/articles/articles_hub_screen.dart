@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import '../../l10n/app_localizations.dart';
 import '../home/sections/article_carousel_section.dart';
 import 'data/articles_data.dart';
@@ -12,7 +13,7 @@ class ArticlesHubScreen extends StatelessWidget {
     final t = AppLocalizations.of(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: context.colors.background,
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 18, 22, 120),
@@ -24,7 +25,7 @@ class ArticlesHubScreen extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               t.articlesHubSubtitle,
-              style: TextStyle(fontSize: 15, color: Colors.grey.shade600),
+              style: TextStyle(fontSize: 15, color: context.colors.textSecondary),
             ),
             const SizedBox(height: 26),
             ArticleCarouselSection(
