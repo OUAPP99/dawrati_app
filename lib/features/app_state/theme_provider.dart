@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeProvider extends ChangeNotifier {
-  ThemeMode themeMode = ThemeMode.system;
+  // Dark mode is opt-in only: the app always starts in light mode unless
+  // the user explicitly picks Dark (or System) in Settings > Appearance.
+  ThemeMode themeMode = ThemeMode.light;
 
   ThemeProvider() {
     load();
@@ -14,7 +16,8 @@ class ThemeProvider extends ChangeNotifier {
     themeMode = switch (saved) {
       'light' => ThemeMode.light,
       'dark' => ThemeMode.dark,
-      _ => ThemeMode.system,
+      'system' => ThemeMode.system,
+      _ => ThemeMode.light,
     };
     notifyListeners();
   }
