@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/services/cloud_sync_service.dart';
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_shadows.dart';
 import '../../l10n/app_localizations.dart';
@@ -47,9 +48,10 @@ class PartnerDashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final ownerUid = context.watch<PartnerModeProvider>().ownerUid;
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: colors.background,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(22, 18, 22, 30),
@@ -66,7 +68,7 @@ class PartnerDashboardScreen extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () => _disconnect(context),
-                    icon: const Icon(Icons.logout, color: Colors.grey),
+                    icon: Icon(Icons.logout, color: colors.textSecondary),
                     tooltip: t.partnerDisconnect,
                   ),
                 ],
@@ -74,7 +76,7 @@ class PartnerDashboardScreen extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 t.partnerDashboardSubtitle,
-                style: TextStyle(color: Colors.grey.shade600),
+                style: TextStyle(color: colors.textSecondary),
               ),
               const SizedBox(height: 24),
               if (ownerUid == null)
@@ -125,12 +127,12 @@ class PartnerDashboardScreen extends StatelessWidget {
                                 const SizedBox(height: 6),
                                 Text(
                                   translatePhase(t, phase),
-                                  style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900),
+                                  style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900, color: Color(0xFF1F2937)),
                                 ),
                                 const SizedBox(height: 14),
                                 Text(
                                   _partnerTip(t, phase),
-                                  style: const TextStyle(fontSize: 15, height: 1.5),
+                                  style: const TextStyle(fontSize: 15, height: 1.5, color: Color(0xFF1F2937)),
                                 ),
                               ],
                             ),
@@ -159,15 +161,17 @@ class PartnerDashboardScreen extends StatelessWidget {
                               ),
                             )
                           else ...[
-                            _detailRow(t.partnerCycleDay, cycleDay != null ? '$cycleDay' : '-'),
-                            _detailRow(t.partnerMood, mood != null ? translateMoodString(t, mood) : '-'),
-                            _detailRow(t.partnerWater, water != null ? '${water.toStringAsFixed(1)} L' : '-'),
-                            _detailRow(t.partnerSleep, sleep != null ? '${sleep.toStringAsFixed(1)} h' : '-'),
+                            _detailRow(context, t.partnerCycleDay, cycleDay != null ? '$cycleDay' : '-'),
+                            _detailRow(context, t.partnerMood, mood != null ? translateMoodString(t, mood) : '-'),
+                            _detailRow(context, t.partnerWater, water != null ? '${water.toStringAsFixed(1)} L' : '-'),
+                            _detailRow(context, t.partnerSleep, sleep != null ? '${sleep.toStringAsFixed(1)} h' : '-'),
                             _detailRow(
+                              context,
                               t.partnerNextPeriod,
                               nextPeriod != null ? _formatDate(nextPeriod) : '-',
                             ),
                             _detailRow(
+                              context,
                               t.partnerNextOvulation,
                               nextOvulation != null ? _formatDate(nextOvulation) : '-',
                             ),
@@ -208,7 +212,7 @@ class PartnerDashboardScreen extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(AppRadius.card),
         boxShadow: AppShadows.soft,
       ),
@@ -222,7 +226,7 @@ class PartnerDashboardScreen extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             DateFormat.yMMMM(Localizations.localeOf(context).toString()).format(currentMonth),
-            style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+            style: TextStyle(color: context.colors.textSecondary, fontSize: 13),
           ),
           const SizedBox(height: 16),
           const WeekHeader(),
@@ -248,18 +252,18 @@ class PartnerDashboardScreen extends StatelessWidget {
     return '${date.year}/${date.month}/${date.day}';
   }
 
-  Widget _detailRow(String label, String value) {
+  Widget _detailRow(BuildContext context, String label, String value) {
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.colors.surface,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(color: Colors.grey.shade600)),
+          Text(label, style: TextStyle(color: context.colors.textSecondary)),
           Text(value, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
         ],
       ),

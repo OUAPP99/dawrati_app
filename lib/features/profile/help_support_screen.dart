@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_shadows.dart';
 import '../../l10n/app_localizations.dart';
@@ -17,8 +18,10 @@ class HelpSupportScreen extends StatelessWidget {
       (t.helpFaq3Q, t.helpFaq3A),
     ];
 
+    final colors = context.colors;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: colors.background,
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 18, 22, 40),
@@ -35,13 +38,13 @@ class HelpSupportScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            Text(t.helpIntro, style: const TextStyle(color: Colors.grey, height: 1.4)),
+            Text(t.helpIntro, style: TextStyle(color: colors.textSecondary, height: 1.4)),
             const SizedBox(height: 20),
 
             Container(
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: colors.surface,
                 borderRadius: BorderRadius.circular(AppRadius.card),
                 boxShadow: AppShadows.soft,
               ),
@@ -78,7 +81,7 @@ class HelpSupportScreen extends StatelessWidget {
               (faq) => Container(
                 margin: const EdgeInsets.only(bottom: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: colors.surface,
                   borderRadius: BorderRadius.circular(AppRadius.card),
                   boxShadow: AppShadows.soft,
                 ),
@@ -90,7 +93,7 @@ class HelpSupportScreen extends StatelessWidget {
                     children: [
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(faq.$2, style: const TextStyle(color: Colors.grey, height: 1.4)),
+                        child: Text(faq.$2, style: TextStyle(color: colors.textSecondary, height: 1.4)),
                       ),
                     ],
                   ),

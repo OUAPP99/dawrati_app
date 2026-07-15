@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_shadows.dart';
 import '../../l10n/app_localizations.dart';
@@ -44,9 +45,10 @@ class PrivacyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: colors.background,
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 18, 22, 40),
@@ -66,7 +68,7 @@ class PrivacyScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: colors.surface,
                 borderRadius: BorderRadius.circular(AppRadius.card),
                 boxShadow: AppShadows.soft,
               ),
@@ -86,7 +88,7 @@ class PrivacyScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: colors.surface,
                 borderRadius: BorderRadius.circular(AppRadius.card),
                 boxShadow: AppShadows.soft,
               ),
@@ -95,7 +97,7 @@ class PrivacyScreen extends StatelessWidget {
                 children: [
                   Text(t.clearMyData, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.red)),
                   const SizedBox(height: 6),
-                  Text(t.clearMyDataDesc, style: const TextStyle(color: Colors.grey)),
+                  Text(t.clearMyDataDesc, style: TextStyle(color: colors.textSecondary)),
                   const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,

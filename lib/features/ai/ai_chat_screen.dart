@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import '../../l10n/app_localizations.dart';
 import 'ai_usage_limiter.dart';
 import 'flowing_text.dart';
@@ -127,9 +128,10 @@ class _AiChatScreenState extends State<AiChatScreen> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final limitReached = _limitReached;
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: colors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -157,7 +159,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
                   if (!widget.isPremium && !widget.premiumOnly)
                     Text(
                       t.aiFreeMessagesLeft(remainingFree),
-                      style: const TextStyle(fontSize: 11, color: Colors.grey),
+                      style: TextStyle(fontSize: 11, color: colors.textSecondary),
                     ),
                 ],
               ),
@@ -170,7 +172,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
                         child: Text(
                           t.aiChatEmptyState,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(color: Colors.grey, fontSize: 16),
+                          style: TextStyle(color: colors.textSecondary, fontSize: 16),
                         ),
                       ),
                     )
@@ -178,7 +180,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
                       controller: scrollController,
                       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
                       itemCount: messages.length,
-                      itemBuilder: (context, index) => _bubble(messages[index]),
+                      itemBuilder: (context, index) => _bubble(context, messages[index]),
                     ),
             ),
             if (sending)
@@ -239,7 +241,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
                         decoration: InputDecoration(
                           hintText: t.aiChatInputHint,
                           filled: true,
-                          fillColor: Colors.white,
+                          fillColor: colors.surface,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(24),
                             borderSide: BorderSide.none,
@@ -266,8 +268,9 @@ class _AiChatScreenState extends State<AiChatScreen> {
     );
   }
 
-  Widget _bubble(ChatMessage message) {
+  Widget _bubble(BuildContext context, ChatMessage message) {
     final isUser = message.role == ChatRole.user;
+    final colors = context.colors;
 
     return Align(
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
@@ -276,13 +279,13 @@ class _AiChatScreenState extends State<AiChatScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
         constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
         decoration: BoxDecoration(
-          color: isUser ? const Color(0xFFE91E63) : Colors.white,
+          color: isUser ? const Color(0xFFE91E63) : colors.surface,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
           message.text,
           style: TextStyle(
-            color: isUser ? Colors.white : Colors.black87,
+            color: isUser ? Colors.white : colors.textPrimary,
             height: 1.4,
           ),
         ),

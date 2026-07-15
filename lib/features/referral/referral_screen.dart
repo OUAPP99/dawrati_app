@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../core/services/cloud_sync_service.dart';
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_shadows.dart';
 import '../../l10n/app_localizations.dart';
@@ -107,9 +108,10 @@ class _ReferralScreenState extends State<ReferralScreen> {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: colors.background,
       body: SafeArea(
         child: loading
             ? const Center(child: CircularProgressIndicator())
@@ -131,13 +133,13 @@ class _ReferralScreenState extends State<ReferralScreen> {
                     Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: colors.surface,
                         borderRadius: BorderRadius.circular(AppRadius.card),
                         boxShadow: AppShadows.soft,
                       ),
                       child: Text(
                         t.referralSignInRequired,
-                        style: TextStyle(color: Colors.grey.shade700, height: 1.5),
+                        style: TextStyle(color: colors.textSecondary, height: 1.5),
                       ),
                     )
                   else ...[
@@ -150,7 +152,10 @@ class _ReferralScreenState extends State<ReferralScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(t.referralInviteTitle, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
+                          Text(
+                            t.referralInviteTitle,
+                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Color(0xFF1F2937)),
+                          ),
                           const SizedBox(height: 8),
                           Text(
                             t.referralInviteDesc(rewardDays),
@@ -166,7 +171,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
                             child: Center(
                               child: Text(
                                 myCode ?? '—',
-                                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: 4),
+                                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900, letterSpacing: 4, color: Color(0xFF1F2937)),
                               ),
                             ),
                           ),
@@ -195,7 +200,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
                         decoration: InputDecoration(
                           hintText: t.referralCodeHint,
                           filled: true,
-                          fillColor: Colors.white,
+                          fillColor: colors.surface,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
                             borderSide: BorderSide.none,
@@ -221,7 +226,7 @@ class _ReferralScreenState extends State<ReferralScreen> {
                       Container(
                         padding: const EdgeInsets.all(18),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: colors.surface,
                           borderRadius: BorderRadius.circular(AppRadius.card),
                           boxShadow: AppShadows.soft,
                         ),

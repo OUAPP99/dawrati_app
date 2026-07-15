@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import '../../l10n/app_localizations.dart';
 import '../../l10n/label_translations.dart';
 import '../cycle/cycle_provider.dart';
@@ -17,9 +18,10 @@ class AiCoachScreen extends StatelessWidget {
     final log = context.watch<DailyLogProvider>();
     final subscription = context.watch<SubscriptionProvider>();
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: colors.background,
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 10, 22, 120),
@@ -68,6 +70,7 @@ class AiCoachScreen extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.w900,
+                      color: Color(0xFF1F2937),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -86,24 +89,28 @@ class AiCoachScreen extends StatelessWidget {
             const SizedBox(height: 26),
 
             _adviceCard(
+              context,
               t.currentPhase,
               t.phaseDayCombo(translatePhase(t, cycle.phase), cycle.cycleDay),
               Icons.favorite,
             ),
 
             _adviceCard(
+              context,
               t.todaysMood,
               translateMoodString(t, log.mood),
               Icons.mood,
             ),
 
             _adviceCard(
+              context,
               t.hydrationTitle,
               t.hydrationTodayValue(log.water.toStringAsFixed(1)),
               Icons.water_drop,
             ),
 
             _adviceCard(
+              context,
               t.sleepLabel,
               t.sleepHoursValue(log.sleep.toStringAsFixed(1)),
               Icons.bedtime,
@@ -114,7 +121,7 @@ class AiCoachScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(22),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: colors.surface,
                 borderRadius: BorderRadius.circular(30),
               ),
               child: Column(
@@ -197,15 +204,17 @@ class AiCoachScreen extends StatelessWidget {
   }
 
   Widget _adviceCard(
+    BuildContext context,
     String title,
     String value,
     IconData icon,
   ) {
+    final colors = context.colors;
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(28),
       ),
       child: Row(
@@ -224,8 +233,8 @@ class AiCoachScreen extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    color: Colors.grey,
+                  style: TextStyle(
+                    color: colors.textSecondary,
                   ),
                 ),
                 const SizedBox(height: 4),

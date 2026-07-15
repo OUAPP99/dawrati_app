@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/widgets/animated_tap.dart';
 import '../../l10n/app_localizations.dart';
 import '../subscription/billing_service.dart';
@@ -55,7 +56,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
         !subscription.purchaseInProgress;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: context.colors.background,
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 18, 22, 40),
@@ -120,6 +121,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                     style: const TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w900,
+                      color: Color(0xFF1F2937),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -150,21 +152,25 @@ class _PremiumScreenState extends State<PremiumScreen> {
             const SizedBox(height: 26),
 
             _feature(
+              context,
               Icons.auto_awesome,
               t.aiCoachCardTitle,
               t.featureAiCoachDesc,
             ),
             _feature(
+              context,
               Icons.analytics_outlined,
               t.advancedInsights,
               t.featureAdvancedInsightsDesc,
             ),
             _feature(
+              context,
               Icons.history,
               t.featureUnlimitedHistoryTitle,
               t.featureUnlimitedHistoryDesc,
             ),
             _feature(
+              context,
               Icons.cloud_outlined,
               t.featureCloudBackupTitle,
               t.featureCloudBackupDesc,
@@ -172,9 +178,10 @@ class _PremiumScreenState extends State<PremiumScreen> {
 
             const SizedBox(height: 22),
 
-            _pricing(t, t.monthlyLabel, monthly?.price ?? '—', !isAnnual, () => setState(() => isAnnual = false)),
+            _pricing(context, t, t.monthlyLabel, monthly?.price ?? '—', !isAnnual, () => setState(() => isAnnual = false)),
             const SizedBox(height: 14),
             _pricing(
+              context,
               t,
               t.annualLabel,
               yearly?.price ?? '—',
@@ -226,7 +233,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               child: Text(
                 t.premiumTrustLine,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.grey, fontSize: 12),
+                style: TextStyle(color: context.colors.textSecondary, fontSize: 12),
               ),
             ),
 
@@ -236,7 +243,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               Text(
                 t.billingUnavailable,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.grey),
+                style: TextStyle(color: context.colors.textSecondary),
               )
             else
               Center(
@@ -255,12 +262,13 @@ class _PremiumScreenState extends State<PremiumScreen> {
     );
   }
 
-  Widget _feature(IconData icon, String title, String subtitle) {
+  Widget _feature(BuildContext context, IconData icon, String title, String subtitle) {
+    final colors = context.colors;
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(28),
       ),
       child: Row(
@@ -285,8 +293,8 @@ class _PremiumScreenState extends State<PremiumScreen> {
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    color: Colors.grey,
+                  style: TextStyle(
+                    color: colors.textSecondary,
                     height: 1.3,
                   ),
                 ),
@@ -299,6 +307,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
   }
 
   Widget _pricing(
+    BuildContext context,
     AppLocalizations t,
     String title,
     String price,
@@ -308,6 +317,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
     String? subtitle,
     int? savePercent,
   }) {
+    final colors = context.colors;
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -316,7 +326,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: selected ? const Color(0xFFFFEAF3) : Colors.white,
+              color: selected ? const Color(0xFFFFEAF3) : colors.surface,
               borderRadius: BorderRadius.circular(28),
               border: Border.all(
                 color: selected ? const Color(0xFFE91E63) : Colors.transparent,
@@ -327,7 +337,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               children: [
                 Icon(
                   selected ? Icons.radio_button_checked : Icons.radio_button_off,
-                  color: selected ? const Color(0xFFE91E63) : Colors.grey,
+                  color: selected ? const Color(0xFFE91E63) : colors.textSecondary,
                 ),
                 const SizedBox(width: 14),
                 Expanded(
@@ -367,7 +377,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                         const SizedBox(height: 3),
                         Text(
                           subtitle,
-                          style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                          style: TextStyle(color: colors.textSecondary, fontSize: 12),
                         ),
                       ],
                     ],

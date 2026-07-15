@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/services/notification_service.dart';
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_shadows.dart';
 import '../../l10n/app_localizations.dart';
@@ -27,9 +28,10 @@ class NotificationSettingsScreen extends StatelessWidget {
     final settings = context.watch<NotificationSettingsProvider>();
     final cycle = context.watch<CycleProvider>();
     final usesPill = context.watch<AppStateProvider>().contraceptionMethod == 'pill';
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: colors.background,
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 18, 22, 40),
@@ -52,7 +54,7 @@ class NotificationSettingsScreen extends StatelessWidget {
               padding: const EdgeInsets.only(left: 8),
               child: Text(
                 t.notificationsSettingsSubtitle,
-                style: const TextStyle(color: Colors.grey),
+                style: TextStyle(color: colors.textSecondary),
               ),
             ),
             const SizedBox(height: 24),
@@ -196,12 +198,13 @@ class NotificationSettingsScreen extends StatelessWidget {
     ValueChanged<TimeOfDay>? onTimeChanged,
   }) {
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(AppRadius.card),
         boxShadow: AppShadows.soft,
       ),
@@ -221,7 +224,7 @@ class NotificationSettingsScreen extends StatelessWidget {
                   children: [
                     Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 4),
-                    Text(desc, style: const TextStyle(color: Colors.grey, fontSize: 13)),
+                    Text(desc, style: TextStyle(color: colors.textSecondary, fontSize: 13)),
                   ],
                 ),
               ),
@@ -244,9 +247,9 @@ class NotificationSettingsScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: Row(
                   children: [
-                    const Icon(Icons.schedule, size: 18, color: Colors.grey),
+                    Icon(Icons.schedule, size: 18, color: colors.textSecondary),
                     const SizedBox(width: 8),
-                    Text(t.reminderTimeLabel, style: const TextStyle(color: Colors.grey)),
+                    Text(t.reminderTimeLabel, style: TextStyle(color: colors.textSecondary)),
                     const Spacer(),
                     Text(
                       time.format(context),

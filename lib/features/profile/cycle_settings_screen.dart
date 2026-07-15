@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_shadows.dart';
 import '../../l10n/app_localizations.dart';
@@ -15,9 +16,10 @@ class CycleSettingsScreen extends StatelessWidget {
     final t = AppLocalizations.of(context);
     final cycle = context.watch<CycleProvider>();
     final locale = Localizations.localeOf(context).toString();
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: colors.background,
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 18, 22, 40),
@@ -37,7 +39,7 @@ class CycleSettingsScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: colors.surface,
                 borderRadius: BorderRadius.circular(AppRadius.card),
                 boxShadow: AppShadows.soft,
               ),
@@ -52,7 +54,7 @@ class CycleSettingsScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(t.periodStartDateLabel, style: const TextStyle(color: Colors.grey)),
+                        Text(t.periodStartDateLabel, style: TextStyle(color: colors.textSecondary)),
                         const SizedBox(height: 4),
                         Text(
                           DateFormat.yMMMMd(locale).format(cycle.periodStartDate),
@@ -84,7 +86,7 @@ class CycleSettingsScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: colors.surface,
                 borderRadius: BorderRadius.circular(AppRadius.card),
                 boxShadow: AppShadows.soft,
               ),
@@ -99,7 +101,7 @@ class CycleSettingsScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(t.averageCycle, style: const TextStyle(color: Colors.grey)),
+                        Text(t.averageCycle, style: TextStyle(color: colors.textSecondary)),
                         const SizedBox(height: 4),
                         Text(
                           t.daysCount(cycle.averageCycleLength),
@@ -117,7 +119,7 @@ class CycleSettingsScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: colors.surface,
                 borderRadius: BorderRadius.circular(AppRadius.card),
                 boxShadow: AppShadows.soft,
               ),
@@ -132,7 +134,7 @@ class CycleSettingsScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(t.averagePeriodLength, style: const TextStyle(color: Colors.grey)),
+                        Text(t.averagePeriodLength, style: TextStyle(color: colors.textSecondary)),
                         const SizedBox(height: 4),
                         Text(
                           t.daysCount(cycle.periodLength),
@@ -153,7 +155,7 @@ class CycleSettingsScreen extends StatelessWidget {
               cycle.hasRealCycleData
                   ? t.cycleBasedOnHistory(cycle.periodHistory.length, cycle.averageCycleLength, cycle.periodLength)
                   : t.cycleBasedOnEstimate(cycle.averageCycleLength),
-              style: const TextStyle(color: Colors.grey, height: 1.5),
+              style: TextStyle(color: colors.textSecondary, height: 1.5),
             ),
           ],
         ),

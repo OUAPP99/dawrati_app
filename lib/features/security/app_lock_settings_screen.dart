@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/theme/app_color_scheme.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_shadows.dart';
 import '../../core/widgets/animated_tap.dart';
@@ -64,9 +65,10 @@ class _AppLockSettingsScreenState extends State<AppLockSettingsScreen> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
     final appLock = context.watch<AppLockProvider>();
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: colors.background,
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.fromLTRB(22, 18, 22, 40),
@@ -89,7 +91,7 @@ class _AppLockSettingsScreenState extends State<AppLockSettingsScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: colors.surface,
                     borderRadius: BorderRadius.circular(AppRadius.card),
                     boxShadow: AppShadows.soft,
                   ),
@@ -106,7 +108,7 @@ class _AppLockSettingsScreenState extends State<AppLockSettingsScreen> {
                           children: [
                             Text(t.appLockEnable, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
                             const SizedBox(height: 2),
-                            Text(t.appLockEnableDesc, style: TextStyle(color: Colors.grey.shade700)),
+                            Text(t.appLockEnableDesc, style: TextStyle(color: colors.textSecondary)),
                           ],
                         ),
                       ),
@@ -117,6 +119,7 @@ class _AppLockSettingsScreenState extends State<AppLockSettingsScreen> {
               )
             else ...[
               _item(
+                context,
                 icon: Icons.password,
                 title: t.appLockChangePin,
                 onTap: _setupPin,
@@ -126,22 +129,23 @@ class _AppLockSettingsScreenState extends State<AppLockSettingsScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: colors.surface,
                     borderRadius: BorderRadius.circular(AppRadius.card),
                     boxShadow: AppShadows.soft,
                   ),
                   child: SwitchListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(t.appLockUseBiometrics, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-                    subtitle: Text(t.appLockUseBiometricsDesc, style: TextStyle(color: Colors.grey.shade700, fontSize: 13)),
+                    subtitle: Text(t.appLockUseBiometricsDesc, style: TextStyle(color: colors.textSecondary, fontSize: 13)),
                     value: appLock.useBiometrics,
                     onChanged: (value) => context.read<AppLockProvider>().setUseBiometrics(value),
                   ),
                 )
               else
-                Text(t.appLockBiometricsUnavailable, style: TextStyle(color: Colors.grey.shade600)),
+                Text(t.appLockBiometricsUnavailable, style: TextStyle(color: colors.textSecondary)),
               const SizedBox(height: 22),
               _item(
+                context,
                 icon: Icons.lock_open,
                 title: t.appLockDisable,
                 titleColor: Colors.red,
@@ -154,13 +158,13 @@ class _AppLockSettingsScreenState extends State<AppLockSettingsScreen> {
     );
   }
 
-  Widget _item({required IconData icon, required String title, VoidCallback? onTap, Color? titleColor}) {
+  Widget _item(BuildContext context, {required IconData icon, required String title, VoidCallback? onTap, Color? titleColor}) {
     return AnimatedTap(
       onTap: onTap ?? () {},
       child: Container(
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.colors.surface,
           borderRadius: BorderRadius.circular(AppRadius.card),
           boxShadow: AppShadows.soft,
         ),

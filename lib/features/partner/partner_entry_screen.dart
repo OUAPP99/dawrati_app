@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/services/cloud_sync_service.dart';
+import '../../core/theme/app_color_scheme.dart';
 import '../../l10n/app_localizations.dart';
 import '../auth/auth_provider.dart';
 import 'partner_dashboard_screen.dart';
@@ -61,9 +62,10 @@ class _PartnerEntryScreenState extends State<PartnerEntryScreen> {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: colors.background,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(28, 20, 28, 40),
@@ -98,7 +100,7 @@ class _PartnerEntryScreenState extends State<PartnerEntryScreen> {
               Text(
                 t.partnerEntrySubtitle,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15, color: Colors.grey.shade600, height: 1.4),
+                style: TextStyle(fontSize: 15, color: colors.textSecondary, height: 1.4),
               ),
               const SizedBox(height: 30),
               TextField(
@@ -109,7 +111,7 @@ class _PartnerEntryScreenState extends State<PartnerEntryScreen> {
                 decoration: InputDecoration(
                   hintText: t.partnerCodeHint,
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: colors.surface,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide.none,

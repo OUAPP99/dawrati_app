@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../core/services/cloud_sync_service.dart';
+import '../../core/theme/app_color_scheme.dart';
 import '../../l10n/app_localizations.dart';
 
 class PartnerCodeScreen extends StatefulWidget {
@@ -38,9 +39,10 @@ class _PartnerCodeScreenState extends State<PartnerCodeScreen> {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
+    final colors = context.colors;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF7FA),
+      backgroundColor: colors.background,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(22, 18, 22, 30),
@@ -56,7 +58,7 @@ class _PartnerCodeScreenState extends State<PartnerCodeScreen> {
               const SizedBox(height: 10),
               Text(
                 t.partnerCodeScreenSubtitle,
-                style: TextStyle(color: Colors.grey.shade600, height: 1.4),
+                style: TextStyle(color: colors.textSecondary, height: 1.4),
               ),
               const SizedBox(height: 30),
               if (loading)
@@ -68,7 +70,7 @@ class _PartnerCodeScreenState extends State<PartnerCodeScreen> {
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 32),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: colors.surface,
                     borderRadius: BorderRadius.circular(28),
                     boxShadow: [
                       BoxShadow(color: Colors.black.withValues(alpha: .05), blurRadius: 24, offset: const Offset(0, 10)),
