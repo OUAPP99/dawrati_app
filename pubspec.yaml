@@ -2,7 +2,7 @@ name: cycle_app
 description: "Dawrati (دورتي) - cycle tracking and wellness companion."
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.0+5
 
 environment:
   sdk: ^3.12.2

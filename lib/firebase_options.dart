@@ -19,16 +19,16 @@ class DefaultFirebaseOptions {
     }
 
     switch (defaultTargetPlatform) {
-      case TargetPlatform.android:
       case TargetPlatform.iOS:
+        return ios;
+      case TargetPlatform.android:
       case TargetPlatform.macOS:
       case TargetPlatform.windows:
       case TargetPlatform.linux:
       case TargetPlatform.fuchsia:
         // Falls back to the web config so the app still runs during
         // development. Replace with platform-specific FirebaseOptions
-        // (from google-services.json / GoogleService-Info.plist) before
-        // shipping to Android/iOS.
+        // (from google-services.json) before shipping to Android.
         return web;
     }
   }
@@ -41,5 +41,16 @@ class DefaultFirebaseOptions {
     messagingSenderId: '123563739832',
     appId: '1:123563739832:web:8de7940a8ad12d6c85824d',
     measurementId: 'G-FME6BMV4BD',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyDpAAOM8w-421mDyNWMofTSDOePQw4TKR0',
+    appId: '1:123563739832:ios:1f1a83a5d008936a85824d',
+    messagingSenderId: '123563739832',
+    projectId: 'dawrati-app',
+    storageBucket: 'dawrati-app.firebasestorage.app',
+    iosBundleId: 'com.dawrati.app',
+    iosClientId:
+        '123563739832-8v19qe3c3e9p83b59b40jcndhbord205.apps.googleusercontent.com',
   );
 }
